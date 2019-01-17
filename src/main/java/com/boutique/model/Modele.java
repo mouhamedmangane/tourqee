@@ -1,6 +1,5 @@
 package com.boutique.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,9 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@SuppressWarnings("serial")
 @Entity
-public class Model implements Serializable {
+public class Modele {
 	
 	@Id
 	@GeneratedValue
@@ -28,11 +26,11 @@ public class Model implements Serializable {
 	@JoinColumn(name="id_collection")
 	private Collection collection;
 
-	public Model() {
+	public Modele() {
 		super();
 	}
 
-	public Model(long idModel, String nom, Date date, Collection collection) {
+	public Modele(long idModel, String nom, Date date, Collection collection) {
 		super();
 		this.idModel = idModel;
 		this.nom = nom;

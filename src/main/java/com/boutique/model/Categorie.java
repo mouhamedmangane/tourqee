@@ -1,6 +1,5 @@
 package com.boutique.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@SuppressWarnings("serial")
 @Entity
-public class Categorie implements Serializable {
+public class Categorie {
 	
 	@Id
 	@GeneratedValue
