@@ -24,16 +24,16 @@ public class Collection {
 	private Date date;
 	
 	@ManyToOne
-	@JoinColumn(name="id_categorie")
+	@JoinColumn(name="id_categorie",insertable=true,nullable=true)
 	private Categorie categorie;
 
-	private List<Model> models;
+	private List<Modele> models;
 
 	public Collection() {
 		super();
 	}
 
-	public Collection(long idCollection, String nom, Date date, Categorie categorie, List<Model> models) {
+	public Collection(long idCollection, String nom, Date date, Categorie categorie, List<Modele> models) {
 		super();
 		this.idCollection = idCollection;
 		this.nom = nom;
@@ -66,11 +66,11 @@ public class Collection {
 		this.nom = nom;
 	}
 
-	public List<Model> getModels() {
+	public List<Modele> getModels() {
 		return models;
 	}
 
-	public void setModels(List<Model> models) {
+	public void setModels(List<Modele> models) {
 		this.models = models;
 	}
 
