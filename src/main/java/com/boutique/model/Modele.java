@@ -1,6 +1,7 @@
 package com.boutique.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Modele {
@@ -21,6 +23,12 @@ public class Modele {
 	
 	@Column(name="date")
 	private Date date;
+	
+	
+	@OneToMany(mappedBy="modele")
+	private List<LigneModelTissu> ligneModelTissus;
+	
+	
 	
 	@ManyToOne
 	@JoinColumn(name="id_collection")

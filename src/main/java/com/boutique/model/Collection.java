@@ -24,7 +24,7 @@ public class Collection {
 	private Date date;
 	
 	@ManyToOne
-	@JoinColumn(name="id_categorie")
+	@JoinColumn(name="id_categorie",insertable=true,nullable=true)
 	private Categorie categorie;
 
 	private List<Modele> models;

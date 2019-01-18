@@ -3,10 +3,14 @@ package com.boutique.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Categorie {
@@ -21,6 +25,8 @@ public class Categorie {
 	@Column(name="date")
 	private Date date;
 	
+	@JsonBackReference
+	@OneToMany(mappedBy="categorie",cascade=CascadeType.DETACH)
 	private List<Collection> collection;
 
 	public Categorie() {
