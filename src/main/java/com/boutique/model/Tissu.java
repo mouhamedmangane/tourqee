@@ -10,9 +10,12 @@ public class Tissu {
 	
 	private int idTissu;
 	private String nom;
+	
+	
 	private TypeTissu typeTissu;
+	
+	
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	private DescriptionTissu description;
 	
-
 }
