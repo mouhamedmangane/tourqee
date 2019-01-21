@@ -1,35 +1,41 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-
-public class TypeTissu {
+@Entity
+public class TypeTissu implements Serializable {
 	
 	@Id
 	@GeneratedValue
-	private long idTypeTissue;
+	private long idTypeTissu;
 	
 	private String nom;
 	
-	@OneToMany
-	@JoinColumn(name="id_tissu")
-	private List<Tissu> sousTypeTissu;
+	@OneToMany(mappedBy="typeTissu")
+	private List<Tissu> tissus;
+	
+	@ManyToOne
+	@JoinColumn(name="id_ligne_model_tissu",insertable=false,updatable=false)
+	private LigneModelTissu ligneModelTissu;
 
 	public TypeTissu() {
 		super();
 	}
 
-	public long getIdTypeTissue() {
-		return idTypeTissue;
+	public long getIdTypeTissu() {
+		return idTypeTissu;
 	}
 
-	public void setIdTypeTissue(long idTypeTissue) {
-		this.idTypeTissue = idTypeTissue;
+	public void setIdTypeTissu(long idTypeTissu) {
+		this.idTypeTissu = idTypeTissu;
 	}
 
 	public String getNom() {
@@ -40,13 +46,23 @@ public class TypeTissu {
 		this.nom = nom;
 	}
 
-	public List<Tissu> getSousTypeTissu() {
-		return sousTypeTissu;
+	public List<Tissu> getTissus() {
+		return tissus;
 	}
 
-	public void setSousTypeTissu(List<Tissu> sousTypeTissu) {
-		this.sousTypeTissu = sousTypeTissu;
+	public void setTissus(List<Tissu> tissus) {
+		this.tissus = tissus;
 	}
+
+	public LigneModelTissu getLigneModelTissu() {
+		return ligneModelTissu;
+	}
+
+	public void setLigneModelTissu(LigneModelTissu ligneModelTissu) {
+		this.ligneModelTissu = ligneModelTissu;
+	}
+
+
 
 
 

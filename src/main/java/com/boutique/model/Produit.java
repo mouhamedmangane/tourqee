@@ -1,5 +1,6 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,10 +13,10 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.ManyToAny;
 
 @Entity
-public class Produit {
+public class Produit implements Serializable{
 	@Id
 	@GeneratedValue
-	private Produit idProduit;
+	private long idProduit;
 	
 	@ManyToOne
 	@JoinColumn(name="id_modele")
@@ -36,13 +37,19 @@ public class Produit {
 		super();
 	}
 
-	public Produit getIdProduit() {
+
+
+	public long getIdProduit() {
 		return idProduit;
 	}
 
-	public void setIdProduit(Produit idProduit) {
+
+
+	public void setIdProduit(long idProduit) {
 		this.idProduit = idProduit;
 	}
+
+
 
 	public Modele getModele() {
 		return modele;

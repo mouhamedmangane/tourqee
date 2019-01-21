@@ -1,11 +1,15 @@
 package com.boutique.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-public class LigneCommande {
+@Entity
+public class LigneCommande implements Serializable{
 	@Id
 	@GeneratedValue
 	private long idLigneCommande;

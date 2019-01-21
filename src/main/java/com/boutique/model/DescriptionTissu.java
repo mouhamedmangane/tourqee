@@ -1,12 +1,14 @@
 package com.boutique.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class DescriptionTissu {
+public class DescriptionTissu implements Serializable{
 
 	@Id
 	@GeneratedValue

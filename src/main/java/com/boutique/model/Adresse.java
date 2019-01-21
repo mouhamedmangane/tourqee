@@ -1,5 +1,7 @@
 package com.boutique.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,7 +11,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.ManyToAny;
 
 @Entity
-public class Adresse {
+public class Adresse implements Serializable{
 	
 	@Id
 	@GeneratedValue

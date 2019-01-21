@@ -1,18 +1,22 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
-public class Collection {
+public class Collection implements Serializable{
 	
 	@Id
 	@GeneratedValue
@@ -24,11 +28,13 @@ public class Collection {
 	@Column(name="date")
 	private Date date;
 	
-	@ManyToOne
-	@JoinColumn(name="id_categorie",insertable=false,updatable=false)
+	@JsonBackReference
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_categorie",insertable=true,updatable=false)
 	private Categorie categorie;
-
-	@OneToMany(mappedBy="collection")	
+	
+	@JsonBackReference
+	@OneToMany(mappedBy="collection",fetch=FetchType.LAZY)	
 	private List<Modele> models;
 
 	public Collection() {

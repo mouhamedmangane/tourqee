@@ -26,7 +26,9 @@ public class CategorieController {
 	
 	@RequestMapping(path="/getCategory/{id}", method=RequestMethod.GET)
 	public Optional<Categorie> getCategory(@PathVariable Long id) {
-		return cr.findById(id);
+		Optional<Categorie> cat= cr.findById(id);
+		cat.get().getCollections();
+		return cat;
 	}
 	
 	@RequestMapping(path="/getAllCategory", method=RequestMethod.GET)

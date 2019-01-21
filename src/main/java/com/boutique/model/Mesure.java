@@ -1,9 +1,11 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,8 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
-public class Mesure {
+public class Mesure implements Serializable{
 	
 	@Id
 	@GeneratedValue
@@ -28,7 +32,8 @@ public class Mesure {
 	@JoinColumn(name="id_client")
 	private Client client;
 	
-	@OneToMany(mappedBy="ligneMesures")
+	@JsonBackReference
+	@OneToMany(mappedBy="mesure",fetch=FetchType.LAZY)
 	private List<LigneMesure> ligneMesures;
 
 	public Mesure() {

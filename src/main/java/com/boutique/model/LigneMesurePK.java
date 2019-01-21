@@ -1,16 +1,19 @@
 package com.boutique.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Embeddable
-public class LigneMesurePK {
+public class LigneMesurePK implements Serializable{
 	
+	@Column(name = "id_mesure")
 	private long idMesure;
 	
-	@Column(name = "propriete_mesure")
+	@Column(name = "proprete_mesure")
 	@Enumerated(EnumType.STRING)
 	private ProprieteMesure proprieteMesure;
 	

@@ -1,5 +1,6 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Client {
+public class Client implements Serializable {
 	
 	@Id
 	@GeneratedValue
