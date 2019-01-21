@@ -15,4 +15,34 @@ public class DescriptionTissu {
 	
 	@OneToOne
 	private Tissu tissu;
+
+	public DescriptionTissu() {
+		super();
+	}
+
+	public long getIdDesctiptionTissu() {
+		return idDesctiptionTissu;
+	}
+
+	public void setIdDesctiptionTissu(long idDesctiptionTissu) {
+		this.idDesctiptionTissu = idDesctiptionTissu;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public Tissu getTissu() {
+		return tissu;
+	}
+
+	public void setTissu(Tissu tissu) {
+		this.tissu = tissu;
+	}
+	
+	
 }
