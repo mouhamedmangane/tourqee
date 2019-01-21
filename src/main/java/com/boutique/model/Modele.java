@@ -31,7 +31,7 @@ public class Modele {
 	
 	
 	@ManyToOne
-	@JoinColumn(name="id_collection")
+	@JoinColumn(name="id_collection",insertable=false,updatable=false)
 	private Collection collection;
 
 	public Modele() {

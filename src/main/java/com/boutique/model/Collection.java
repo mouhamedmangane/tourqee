@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Collection {
@@ -24,9 +25,10 @@ public class Collection {
 	private Date date;
 	
 	@ManyToOne
-	@JoinColumn(name="id_categorie",insertable=true,nullable=true)
+	@JoinColumn(name="id_categorie",insertable=false,updatable=false)
 	private Categorie categorie;
 
+	@OneToMany(mappedBy="collection")	
 	private List<Modele> models;
 
 	public Collection() {
