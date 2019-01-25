@@ -13,13 +13,13 @@ public enum Type {
 		this.value = value;
 	}
 
-@JsonValue
+	@Override
+	@JsonValue
 	public String toString() {
-		// TODO Auto-generated method stub
 		return super.toString();
 	}
 
- @JsonCreator
+	@JsonCreator
 	public static Type fromValue(String value) {
 		for (Type category : values()) {
 			if (category.value.equalsIgnoreCase(value)) {

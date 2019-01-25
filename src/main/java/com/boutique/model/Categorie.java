@@ -1,20 +1,29 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Categorie {
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"nom"})})
+public class Categorie implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idCategorie;
@@ -25,21 +34,14 @@ public class Categorie {
 	@Column(name="date")
 	private Date date;
 	
-	@JsonBackReference
-	@OneToMany(mappedBy="categorie",cascade=CascadeType.DETACH)
-	private List<Collection> collection;
+	@OneToMany(mappedBy="categorie",fetch=FetchType.LAZY)
+	private List<Collection> collections;
 
 	public Categorie() {
 		super();
 	}
 
-	public Categorie(long idCategorie, String nom, Date date, List<Collection> collection) {
-		super();
-		this.idCategorie = idCategorie;
-		this.nom = nom;
-		this.date = date;
-		this.collection = collection;
-	}
+
 
 	public long getIdCategorie() {
 		return idCategorie;
@@ -65,18 +67,18 @@ public class Categorie {
 		this.date = date;
 	}
 
-	public List<Collection> getCollection() {
-		return collection;
+	public List<Collection> getCollections() {
+		return collections;
 	}
 
-	public void setCollection(List<Collection> collection) {
-		this.collection = collection;
+	public void setCollections(List<Collection> collection) {
+		this.collections = collection;
 	}
 
 	@Override
 	public String toString() {
 		return "Categorie [idCategorie=" + idCategorie + ", nom=" + nom + ", date=" + date + ", collection="
-				+ collection + "]";
+				+ collections + "]";
 	}
 
 }

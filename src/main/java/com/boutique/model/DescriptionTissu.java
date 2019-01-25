@@ -1,18 +1,27 @@
 package com.boutique.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity
-public class DescriptionTissu {
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+@Entity
+public class DescriptionTissu implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private long idDesctiptionTissu;
 	private String nom;
 	
+	@JsonBackReference
 	@OneToOne
 	private Tissu tissu;
 

@@ -1,57 +1,79 @@
 package com.boutique.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.CollectionRepository;
+import com.boutique.dto.CollectionDTO;
+import com.boutique.dto.CollectionDTODetails;
+import com.boutique.exception.NotExistException;
 import com.boutique.model.Collection;
 
 @RestController
+@RequestMapping
+@CrossOrigin
 public class CollectionController {
 	
-	//------ Repository Collection
+	private static final ModelMapper modelMapper = new ModelMapper();
+	
 	@Autowired
-	private CollectionRepository cr;
+	private CollectionRepository collectionRepository;
 	
-	//---------- Get All Collection ------------------
-	@GetMapping(path="/getAllCollection")
-	public List<Collection> getAllModel() {		
-		return cr.findAll();
-	}
-	
-	//--------- Get Collection ---------------
-	@GetMapping(path="/getCollectionById/{id}")
-	public Optional<Collection> getModel(@PathVariable("id") Long id) {
-		return cr.findById(id);
-	}
-	
-	//--------- Create Collection ---------------
 	@PostMapping(path="/saveCollection")
-	public Collection saveModele(@RequestBody Collection collection) {
-		return cr.save(collection);
+	public CollectionDTODetails saveCollection(@RequestBody CollectionDTODetails collectionDTODetails) {
+		Collection collection=collectionRepository.findNomIdCategorie(collectionDTODetails.getNom(),collectionDTODetails.getCategorie().getIdCategorie());
+		if(collection!=null) {
+			throw   new NotExistException("Ce nom de collection existe déja dans cette categorie");
+
+		}
+		collection=modelMapper.map(collectionDTODetails, Collection.class);
+		return modelMapper.map(collectionRepository.save(collection),CollectionDTODetails.class);
 	}
 	
-	//--------- Update Collection ---------------
-	@PutMapping(path="/updateCollection/{id}")
-	public Collection updateModele(@RequestBody Collection collection) {
-		collection.setIdCollection(collection.getIdCollection());
-		return cr.save(collection);
+	@GetMapping(path="/getCollection/{id}")
+	public Optional<Collection> getCollection(@PathVariable Long id) {
+		 return collectionRepository.findById(id);
 	}
 	
-	//--------- Delete Collection ---------------
-	@DeleteMapping(path="/deleteCollection/{id}")
-	public boolean deleteModele(@RequestParam Long id) {
-		cr.deleteById(id);
-		return true;
+	@GetMapping(path="/getCollectionDetails/{id}")
+	public CollectionDTODetails getCollectionDetails(@PathVariable Long id)  {
+		Optional<Collection> collection=collectionRepository.findById(id);
+		if(!collection.isPresent())
+			throw new NotExistException("collection");
+		return modelMapper.map(collection.get(),CollectionDTODetails.class);
+		
 	}
+	
+	@GetMapping(path="/getAllCollection")
+	public List<CollectionDTO> getAllCollection() {
+		List<Collection> listCollection=collectionRepository.findAll();
+		List<CollectionDTO> listCollectionDTO=new ArrayList<>();
+		for (Collection collection : listCollection) {
+			listCollectionDTO.add(modelMapper.map(collection, CollectionDTO.class));
+		}
+		return listCollectionDTO;
+	}
+	
+	@GetMapping(path="/getAllCollectionDetails")
+	public List<CollectionDTODetails> getAllCollectionDetails() {
+		List<Collection> listCollection=collectionRepository.findAll();
+		List<CollectionDTODetails> listCollectionDTODetails=new ArrayList<>();
+		for (Collection collection : listCollection) {
+			listCollectionDTODetails.add(modelMapper.map(collection, CollectionDTODetails.class));
+		}
+		return listCollectionDTODetails;
+	}
+
 }

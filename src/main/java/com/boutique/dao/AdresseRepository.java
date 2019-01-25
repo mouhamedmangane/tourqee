@@ -6,5 +6,5 @@ import com.boutique.model.Adresse;
 
 public interface AdresseRepository extends JpaRepository<Adresse, Long> {
 
-		public void voir();
+
 }

@@ -1,48 +1,69 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.ManyToAny;
 
 @Entity
-public class Produit {
+public class Produit implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
-	private Produit idProduit;
+	private long idProduit;
 	
 	@ManyToOne
 	@JoinColumn(name="id_modele")
 	private Modele modele;
 	
-	@ManyToOne
-	@JoinColumn(name="id_tissu")
-	private Tissu tissu;
+	@ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.REMOVE
+            })
+    @JoinTable(name = "tissu_produit",
+            joinColumns = { @JoinColumn(name = "id_produit") },
+            inverseJoinColumns = { @JoinColumn(name = "id_tissu") })
+	private List<Tissu> tissus;
 	
 	@ManyToOne
 	@JoinColumn(name="mesure")
 	private Mesure mesure;
 	
-	@OneToMany(mappedBy="produit")
-	private List<Propriete> proprietes;
+	@OneToMany(mappedBy="produit",cascade=CascadeType.REMOVE)
+	private List<LignePropriete> ligneProprietes;
 
 	public Produit() {
 		super();
 	}
 
-	public Produit getIdProduit() {
+
+
+	public long getIdProduit() {
 		return idProduit;
 	}
 
-	public void setIdProduit(Produit idProduit) {
+
+
+	public void setIdProduit(long idProduit) {
 		this.idProduit = idProduit;
 	}
+
+
 
 	public Modele getModele() {
 		return modele;
@@ -52,13 +73,19 @@ public class Produit {
 		this.modele = modele;
 	}
 
-	public Tissu getTissu() {
-		return tissu;
+
+
+	public List<Tissu> getTissus() {
+		return tissus;
 	}
 
-	public void setTissu(Tissu tissu) {
-		this.tissu = tissu;
+
+
+	public void setTissus(List<Tissu> tissus) {
+		this.tissus = tissus;
 	}
+
+
 
 	public Mesure getMesure() {
 		return mesure;
@@ -68,12 +95,20 @@ public class Produit {
 		this.mesure = mesure;
 	}
 
-	public List<Propriete> getProprietes() {
-		return proprietes;
+	public List<LignePropriete> getLigneProprietes() {
+		return ligneProprietes;
 	}
 
-	public void setProprietes(List<Propriete> proprietes) {
-		this.proprietes = proprietes;
+	public void setLigneProprietes(List<LignePropriete> proprietes) {
+		this.ligneProprietes = proprietes;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Produit [idProduit=" + idProduit + ", modele=" + modele + ", tissus=" + tissus + ", mesure=" + mesure
+				+ ", proprietes=" + ligneProprietes + "]";
 	}
 	
 	

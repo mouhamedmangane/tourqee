@@ -1,29 +1,38 @@
 package com.boutique.model;
 
-import java.util.List;
+import java.io.Serializable;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import org.springframework.ui.Model;
 
-public class LigneModelTissu {
 
+@Entity
+
+public class LigneModelTissu implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private long idLigneModelTissu;
 	private int partie;
 	
 	@ManyToOne
-	@JoinColumn(name="id_model")
+	@JoinColumn(name="id_modele")
 	private Modele modele;
 	
-	@OneToMany(mappedBy="ligneModelTissu")
-	private List<TypeTissu> typeTissus;
+	@ManyToOne
+	@JoinColumn(name="id_type_tissu")
+	private TypeTissu typeTissu;
 
+	
+	
 	public LigneModelTissu() {
 		super();
 	}
@@ -52,12 +61,12 @@ public class LigneModelTissu {
 		this.modele = modele;
 	}
 
-	public List<TypeTissu> getTypeTissus() {
-		return typeTissus;
+	public TypeTissu getTypeTissu() {
+		return typeTissu;
 	}
 
-	public void setTypeTissus(List<TypeTissu> typeTissus) {
-		this.typeTissus = typeTissus;
+	public void setTypeTissu(TypeTissu typeTissu) {
+		this.typeTissu = typeTissu;
 	}
 	
 	

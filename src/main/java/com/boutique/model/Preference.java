@@ -1,41 +1,51 @@
 package com.boutique.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-public class Preference {
+@Entity
+public class Preference implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
-	private Long idPreference;
+	private long idPreference;
 	private String nom;
 	
-	@Column(name = "type")
-	@Enumerated(EnumType.STRING)
-	private Type type;
 	
-	private boolean isPhoto;
-	private String unite;
 	
-	@OneToMany(mappedBy="preference",cascade=CascadeType.REMOVE)
-	List<Propriete> proprietes;   
-
+	@OneToMany(mappedBy="preference",cascade=CascadeType.ALL)
+	private List<Propriete> proprietes;  
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            },
+            mappedBy = "preferences")
+	private List<Modele> models;
+	
+	
 	public Preference() {
 		super();
 	}
 
-	public Long getIdPreference() {
+	public long getIdPreference() {
 		return idPreference;
 	}
 
-	public void setIdPreference(Long idPreference) {
+	public void setIdPreference(long idPreference) {
 		this.idPreference = idPreference;
 	}
 
@@ -47,21 +57,8 @@ public class Preference {
 		this.nom = nom;
 	}
 
-	public Type getType() {
-		return type;
-	}
 
-	public void setType(Type type) {
-		this.type = type;
-	}
 
-	public boolean isPhoto() {
-		return isPhoto;
-	}
-
-	public void setPhoto(boolean isPhoto) {
-		this.isPhoto = isPhoto;
-	}
 
 	public List<Propriete> getProprietes() {
 		return proprietes;
@@ -69,6 +66,16 @@ public class Preference {
 
 	public void setProprietes(List<Propriete> proprietes) {
 		this.proprietes = proprietes;
+	}
+
+
+
+	public List<Modele> getModels() {
+		return models;
+	}
+
+	public void setModels(List<Modele> models) {
+		this.models = models;
 	}
 	
 	
