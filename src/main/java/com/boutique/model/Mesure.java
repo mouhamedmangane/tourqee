@@ -14,16 +14,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Mesure implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idMesure;
-	
-	private String nom;
 	
 	@Temporal(TemporalType.DATE)
 	private Date date;
@@ -32,7 +34,6 @@ public class Mesure implements Serializable{
 	@JoinColumn(name="id_client")
 	private Client client;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy="mesure",fetch=FetchType.LAZY)
 	private List<LigneMesure> ligneMesures;
 
@@ -48,13 +49,7 @@ public class Mesure implements Serializable{
 		this.idMesure = idMesure;
 	}
 
-	public String getNom() {
-		return nom;
-	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
 
 	public Date getDate() {
 		return date;
@@ -79,6 +74,30 @@ public class Mesure implements Serializable{
 	public void setLigneMesures(List<LigneMesure> ligneMesures) {
 		this.ligneMesures = ligneMesures;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (idMesure ^ (idMesure >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mesure other = (Mesure) obj;
+		if (idMesure != other.idMesure)
+			return false;
+		return true;
+	}
+
+
 	
 	
 	

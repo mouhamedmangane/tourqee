@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ProprieteMesure {
-	COU("cou"),LONGUEUR("longeur");
+	COU("cou"),BRAS("bras");
 
 	private String value;
 	private ProprieteMesure(String value) {
@@ -14,8 +14,8 @@ public enum ProprieteMesure {
 	}
 
 @JsonValue
+@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return super.toString();
 	}
 

@@ -1,43 +1,55 @@
 package com.boutique.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Tissu implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
-	private int idTissu;
+	private long idTissu;
 	
 	private String nom;
 	
 	@ManyToOne
-	@JoinColumn(name="id_type_tissu",insertable=false,updatable=false)
+	@JoinColumn(name="id_type_tissu",insertable=true,updatable=false)
 	private TypeTissu typeTissu;
 	
+	@ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            },
+            mappedBy = "tissus")
+	private List<Produit> produits;
 	
-	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@OneToOne(cascade=CascadeType.REMOVE,fetch=FetchType.LAZY)
 	private DescriptionTissu description;
 	
 	
 	public Tissu() {
 		super();
 	}
-	public int getIdTissu() {
+	public long getIdTissu() {
 		return idTissu;
 	}
-	public void setIdTissu(int idTissu) {
+	public void setIdTissu(long idTissu) {
 		this.idTissu = idTissu;
 	}
 	public String getNom() {
@@ -58,6 +70,13 @@ public class Tissu implements Serializable {
 	public void setDescription(DescriptionTissu description) {
 		this.description = description;
 	}
+	public List<Produit> getProduits() {
+		return produits;
+	}
+	public void setProduits(List<Produit> produits) {
+		this.produits = produits;
+	}
+	
 	
 	
 }

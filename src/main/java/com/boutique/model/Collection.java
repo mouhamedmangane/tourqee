@@ -18,6 +18,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class Collection implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idCollection;
@@ -33,7 +38,6 @@ public class Collection implements Serializable{
 	@JoinColumn(name="id_categorie",insertable=true,updatable=false)
 	private Categorie categorie;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy="collection",fetch=FetchType.LAZY)	
 	private List<Modele> models;
 

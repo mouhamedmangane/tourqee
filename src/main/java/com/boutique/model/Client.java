@@ -6,38 +6,56 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Client implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idClient;
+	
+	@NotNull
 	private String nom;
-	private String Prenom;
+	
+	private String prenom;
+	
 	private String mail;
+	
+	@NotNull
 	private String telephone;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreation;
 	
 	@OneToMany(mappedBy="client",cascade = CascadeType.REMOVE)
-	List<Adresse> adresses;
+	private List<Adresse> adresses;
 	
 	@OneToMany(mappedBy="client")
-	List<Mesure> mesures;
+	private List<Mesure> mesures;
 	
 	@JsonBackReference
 	@OneToMany(mappedBy="client",cascade=CascadeType.REMOVE)
-	List<Commande> commandes;
+	private List<Commande> commandes;
+	
 
+	@OneToOne(mappedBy="client",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	private Compte compte;
+	
 	public Client() {
 		super();
 	}
@@ -59,11 +77,11 @@ public class Client implements Serializable {
 	}
 
 	public String getPrenom() {
-		return Prenom;
+		return prenom;
 	}
 
 	public void setPrenom(String prenom) {
-		Prenom = prenom;
+		prenom = prenom;
 	}
 
 	public Date getDateCreation() {
@@ -112,6 +130,22 @@ public class Client implements Serializable {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+	
+
+	public Compte getCompte() {
+		return compte;
+	}
+
+	public void setCompte(Compte compte) {
+		this.compte = compte;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [idClient=" +       idClient + ", nom=" + nom + ", Prenom=" + prenom + ", mail=" + mail
+				+ ", telephone=" + telephone + ", dateCreation=" + dateCreation + ", adresses=" + adresses
+				+ ", mesures=" + mesures + ", commandes=" + commandes + ", compte=" + compte + "]";
 	}
 	
 	

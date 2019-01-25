@@ -4,19 +4,26 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"nom"})})
 public class Categorie implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idCategorie;
@@ -27,7 +34,6 @@ public class Categorie implements Serializable{
 	@Column(name="date")
 	private Date date;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy="categorie",fetch=FetchType.LAZY)
 	private List<Collection> collections;
 

@@ -3,28 +3,32 @@ package com.boutique.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
 
 @Entity
 public class TypeTissu implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long idTypeTissu;
 	
 	private String nom;
 	
-	@OneToMany(mappedBy="typeTissu")
+	@OneToMany(mappedBy="typeTissu",cascade=CascadeType.REMOVE)
 	private List<Tissu> tissus;
 	
-	@ManyToOne
-	@JoinColumn(name="id_ligne_model_tissu",insertable=false,updatable=false)
-	private LigneModelTissu ligneModelTissu;
+	@OneToMany(mappedBy="typeTissu",cascade=CascadeType.REMOVE)
+	private List<LigneModelTissu> ligneModelTissu;
 
 	public TypeTissu() {
 		super();
@@ -54,13 +58,14 @@ public class TypeTissu implements Serializable {
 		this.tissus = tissus;
 	}
 
-	public LigneModelTissu getLigneModelTissu() {
+	public List<LigneModelTissu> getLigneModelTissu() {
 		return ligneModelTissu;
 	}
 
-	public void setLigneModelTissu(LigneModelTissu ligneModelTissu) {
+	public void setLigneModelTissu(List<LigneModelTissu> ligneModelTissu) {
 		this.ligneModelTissu = ligneModelTissu;
 	}
+
 
 
 

@@ -17,6 +17,10 @@ import javax.persistence.TemporalType;
 @Entity
 public class Commande implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private long idCommande;
@@ -26,7 +30,7 @@ public class Commande implements Serializable{
 	private Date dateFin;
 	private boolean etatCommande;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="id_client",nullable=false,updatable=false)
 	private Client client;
 	
