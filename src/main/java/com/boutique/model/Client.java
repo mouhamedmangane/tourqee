@@ -81,7 +81,7 @@ public class Client implements Serializable {
 	}
 
 	public void setPrenom(String prenom) {
-		prenom = prenom;
+		this.prenom = prenom;
 	}
 
 	public Date getDateCreation() {

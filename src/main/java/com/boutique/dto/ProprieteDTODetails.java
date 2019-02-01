@@ -8,6 +8,8 @@ public class ProprieteDTODetails {
 	private String valeur;
 
 	private PreferenceDTO preference;
+	
+	private String image;
 
 	public long getIdPropriete() {
 		return idPropriete;
@@ -36,6 +38,15 @@ public class ProprieteDTODetails {
 	public ProprieteDTODetails() {
 		super();
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	
 	
 }

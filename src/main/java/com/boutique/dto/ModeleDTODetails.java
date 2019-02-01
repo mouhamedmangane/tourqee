@@ -9,13 +9,17 @@ public class ModeleDTODetails {
 	private long idModel;
 	private String nom;
 	private Date date;
+	
+	
+	
 
 	private List<PreferenceDTO> preferences;
 	
 	private List<LigneModelTissuDTO> ligneModelTissus;
 
-	private CollectionDTO collection;
+	private List<CollectionDTO> collections;
 	
+	private	List<ImageModeleDTO> images;
 	
 	public ModeleDTODetails() {
 		super();
@@ -64,13 +68,25 @@ public class ModeleDTODetails {
 		this.ligneModelTissus = ligneModelTissus;
 	}
 
-	public CollectionDTO getCollection() {
-		return collection;
+	public List<CollectionDTO> getCollections() {
+		return collections;
 	}
 
-	public void setCollection(CollectionDTO collection) {
-		this.collection = collection;
+	public void setCollections(List<CollectionDTO> collections) {
+		this.collections = collections;
 	}
+
+	public List<ImageModeleDTO> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ImageModeleDTO> images) {
+		this.images = images;
+	}
+
+
+	
+	
 	
 	
 }

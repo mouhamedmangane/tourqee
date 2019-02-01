@@ -92,8 +92,17 @@ public class Mesure implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Mesure other = (Mesure) obj;
-		if (idMesure != other.idMesure)
-			return false;
+		if (idMesure!=0 && idMesure == other.idMesure )
+			return true;
+		else {
+			for (LigneMesure ligneMesure : other.ligneMesures) {
+				for (LigneMesure ligneMesure2 : ligneMesures) {
+					if(ligneMesure.getProprieteMesure().equals(ligneMesure2) && ligneMesure.getValeur()!=ligneMesure2.getValeur()) {
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 

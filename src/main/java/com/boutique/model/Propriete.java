@@ -1,6 +1,10 @@
 package com.boutique.model;
 
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -10,7 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+
+import com.boutique.mesImages.PathImage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(
@@ -34,15 +42,11 @@ public class Propriete implements Serializable {
 	@JoinColumn(name="id_preference")
 	private Preference preference;
 	
-//	@ManyToMany(fetch = FetchType.LAZY,
-//            cascade = {
-//                CascadeType.PERSIST,
-//                CascadeType.MERGE
-//            },
-//            mappedBy = "proprietes")
-	
 	@OneToMany(mappedBy="propriete")
 	private List<LignePropriete> ligneProprietes;
+	
+	@Transient
+	private String image;
 
 	public Propriete() {
 		super();
@@ -78,6 +82,30 @@ public class Propriete implements Serializable {
 
 	public void setLigneProprietes(List<LignePropriete> produits) {
 		this.ligneProprietes = produits;
+	}
+	@JsonIgnore
+	public String getImage() {
+		String f="uploads";
+		Path p = Paths.get(f)
+                .toAbsolutePath().normalize();
+
+		if(Files.exists(p.resolve(PathImage.Propriete.toString())
+				.resolve(this.nameImage())
+				, new LinkOption[]{ LinkOption.NOFOLLOW_LINKS}))
+			return "downloadFile"+"/"+PathImage.Propriete.toString()+"/"+this.nameImage();
+		else
+			 return "downloadFile"+"/"+PathImage.Propriete.toString()+"/vide.jpg";
+	}
+	@JsonIgnore
+	public String nameImage() {
+		return idPropriete+".jpg";
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 

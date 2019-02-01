@@ -46,7 +46,7 @@ public class ClientDTO {
 	}
 
 	public void setPrenom(String prenom) {
-		prenom = prenom;
+		this.prenom = prenom;
 	}
 
 	public String getMail() {

@@ -42,6 +42,18 @@ public class CollectionController {
 		return modelMapper.map(collectionRepository.save(collection),CollectionDTODetails.class);
 	}
 	
+	@GetMapping(path="/deleteCollection/{id}")
+	public boolean deleteCollection(@PathVariable Long id) {
+		 collectionRepository.deleteById(id);
+		 return true;
+	}
+	
+	@GetMapping(path="/deleteAllCollection")
+	public boolean  deleteAllCollection() {
+		 collectionRepository.deleteAll();
+		 return true;
+	}
+	
 	@GetMapping(path="/getCollection/{id}")
 	public Optional<Collection> getCollection(@PathVariable Long id) {
 		 return collectionRepository.findById(id);

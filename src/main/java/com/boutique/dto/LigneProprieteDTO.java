@@ -6,9 +6,8 @@ public class LigneProprieteDTO {
 	
 	private LigneProprietePK lignePropiretePK;
 
-	private Long produit;
 
-	private Long propriete;
+	private ProprieteDTODetails propriete;
 
 	public LigneProprieteDTO() {
 		super();
@@ -22,19 +21,13 @@ public class LigneProprieteDTO {
 		this.lignePropiretePK = lignePropiretePK;
 	}
 
-	public Long getProduit() {
-		return produit;
-	}
 
-	public void setProduit(Long produit) {
-		this.produit = produit;
-	}
 
-	public Long getPropriete() {
+	public ProprieteDTODetails getPropriete() {
 		return propriete;
 	}
 
-	public void setPropriete(Long propriete) {
+	public void setPropriete(ProprieteDTODetails  propriete) {
 		this.propriete = propriete;
 	}
 	
