@@ -4,22 +4,22 @@ package com.boutique.dto;
 
 public class TissuDTO {
 
-	private int idTissu;
+	private long idTissu;
 	
 	private String nom;
 	
 	
-	
+	private String image;
 
 	public TissuDTO() {
 		super();
 	}
 
-	public int getIdTissu() {
+	public long getIdTissu() {
 		return idTissu;
 	}
 
-	public void setIdTissu(int idTissu) {
+	public void setIdTissu(long idTissu) {
 		this.idTissu = idTissu;
 	}
 
@@ -31,6 +31,15 @@ public class TissuDTO {
 		this.nom = nom;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	
 
 
 	

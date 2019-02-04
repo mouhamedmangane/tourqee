@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -35,14 +34,19 @@ public class Modele implements Serializable{
 	private Date date;
 	
 	
-	@OneToMany(mappedBy="modele",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="modele",fetch=FetchType.LAZY,cascade=CascadeType.REMOVE)
 	private List<LigneModelTissu> ligneModelTissus;
 	
 	
 	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name="id_collection",insertable=true,updatable=false)
-	private Collection collection;
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+    cascade = {
+        CascadeType.PERSIST,
+        CascadeType.MERGE
+    },
+    mappedBy = "models")
+	private	List<Collection> collections;
 	
 	@ManyToMany(cascade = {
 	        CascadeType.PERSIST,
@@ -51,8 +55,11 @@ public class Modele implements Serializable{
 	        joinColumns = @JoinColumn(name = "id_model"),
 	        inverseJoinColumns = @JoinColumn(name = "id_preference")
 	    )
-	
 	 private List<Preference> preferences;
+	
+	
+	@OneToMany(mappedBy="modele")
+	private List<ImageModele> images;
 
 	public Modele() {
 		super();
@@ -83,12 +90,12 @@ public class Modele implements Serializable{
 		this.date = date;
 	}
 
-	public Collection getCollection() {
-		return collection;
+	public List<Collection> getCollections() {
+		return collections;
 	}
 
-	public void setCollection(Collection collection) {
-		this.collection = collection;
+	public void setCollections(List<Collection> collections) {
+		this.collections = collections;
 	}
 	
 	public List<LigneModelTissu> getLigneModelTissus() {
@@ -109,12 +116,23 @@ public class Modele implements Serializable{
 	public void setPreferences(List<Preference> preferences) {
 		this.preferences = preferences;
 	}
+		
+
+	public List<ImageModele> getImages() {
+		return images;
+	}
+
+
+
+	public void setImages(List<ImageModele> images) {
+		this.images = images;
+	}
 
 
 
 	@Override
 	public String toString() {
-		return "Model [idModel=" + idModel + ", nom=" + nom + ", date=" + date + ", collection=" + collection + "]";
+		return "Model [idModel=" + idModel + ", nom=" + nom + ", date=" + date + ", collection=" + collections + "]";
 	}
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.ClientRepository;
 import com.boutique.dao.CompteRepository;
+import com.boutique.dto.CompteDTO;
 import com.boutique.dto.CompteDTODetails;
 import com.boutique.exception.NotExistException;
 import com.boutique.model.Compte;
@@ -29,6 +30,15 @@ public class CompteController {
 	@Autowired
 	private ClientRepository clientRepository;
 	
+	
+	@PostMapping(path="/connexion")
+	public CompteDTODetails connexion(@RequestBody CompteDTO compteDTO) {
+		Compte compte= modelMapper.map(compteDTO,Compte.class);
+		compte=compteRepository.connexion(compte.getLogin(),compte.getMdp());
+		if(compte==null)
+			throw new NotExistException("client");
+		return modelMapper.map(compte,CompteDTODetails.class);
+	}
 	
 	@PostMapping(path="/updateCompte")
 	public CompteDTODetails saveCompte(@RequestBody CompteDTODetails compteDD) {

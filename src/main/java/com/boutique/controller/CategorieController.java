@@ -22,7 +22,6 @@ import com.boutique.exception.NotExistException;
 import com.boutique.model.Categorie;
 
 @RestController
-@RequestMapping
 @CrossOrigin
 public class CategorieController {
 	
@@ -47,6 +46,12 @@ public class CategorieController {
 		 return categoryRepository.findById(id);
 	}
 	
+	@GetMapping(path="/deleteCategorie/{id}")
+	public boolean deleteCategory(@PathVariable Long id) {
+		 categoryRepository.deleteById(id);
+		 return true;
+	}
+	
 	@GetMapping(path="/getCategorieDetails/{id}")
 	public CategorieDTODetails getCategorieDetails(@PathVariable Long id)  {
 		Optional<Categorie> categorie=categoryRepository.findById(id);
@@ -57,11 +62,11 @@ public class CategorieController {
 	}
 	
 	@GetMapping(path="/getAllCategorie")
-	public List<CategorieDTO> getAllCategory() {
+	public List<CategorieDTODetails> getAllCategory() {
 		List<Categorie> listCategorie=categoryRepository.findAll();
-		List<CategorieDTO> listCategorieDTO=new ArrayList<>();
+		List<CategorieDTODetails> listCategorieDTO=new ArrayList<>();
 		for (Categorie categorie : listCategorie) {
-			listCategorieDTO.add(modelMapper.map(categorie, CategorieDTO.class));
+			listCategorieDTO.add(modelMapper.map(categorie, CategorieDTODetails.class));
 		}
 		return listCategorieDTO;
 	}

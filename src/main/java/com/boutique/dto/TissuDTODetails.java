@@ -9,7 +9,7 @@ public class TissuDTODetails {
 	
 	private TypeTissuDTO typeTissu;
 	
-	
+	private String image;
 
 	public TissuDTODetails() {
 		super();
@@ -39,6 +39,16 @@ public class TissuDTODetails {
 		this.typeTissu = typeTissu;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	
+	
 
 
 	

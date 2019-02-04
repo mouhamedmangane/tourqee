@@ -22,7 +22,7 @@ import com.boutique.exception.NotExistException;
 import com.boutique.model.Collection;
 
 @RestController
-@RequestMapping
+
 @CrossOrigin
 public class CollectionController {
 	
@@ -40,6 +40,18 @@ public class CollectionController {
 		}
 		collection=modelMapper.map(collectionDTODetails, Collection.class);
 		return modelMapper.map(collectionRepository.save(collection),CollectionDTODetails.class);
+	}
+	
+	@GetMapping(path="/deleteCollection/{id}")
+	public boolean deleteCollection(@PathVariable Long id) {
+		 collectionRepository.deleteById(id);
+		 return true;
+	}
+	
+	@GetMapping(path="/deleteAllCollection")
+	public boolean  deleteAllCollection() {
+		 collectionRepository.deleteAll();
+		 return true;
 	}
 	
 	@GetMapping(path="/getCollection/{id}")

@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.ClientRepository;
 import com.boutique.dao.CompteRepository;
+import com.boutique.dao.MesureRepository;
 import com.boutique.dto.ClientDTODetails;
+import com.boutique.dto.CompteDTO;
+import com.boutique.dto.MesureDTO;
+import com.boutique.dto.MesureDTODetails;
+import com.boutique.exception.NotExistException;
 import com.boutique.model.Client;
 import com.boutique.model.Compte;
+import com.boutique.model.Mesure;
 
 @RestController
 @CrossOrigin
@@ -28,8 +34,8 @@ public class ClientController {
 	@Autowired
 	private ClientRepository clientRepository;
 	
-//	@Autowired
-//	private MesureRepository mesureRepository;
+	@Autowired
+	private MesureRepository mesureRepository;
 	
 	@Autowired
 	private CompteRepository compteRepository;
@@ -48,13 +54,27 @@ public class ClientController {
 		return modelMapper.map(client,ClientDTODetails.class);
 	}
 	
-//	@PostMapping("saveMesureClient")
-//	public ClientDTODetails saveMesureClient(ClientDTODetails clientDD) {
-//		boolean test=clientRepository.existsById(clientDD.getIdClient());
-//		if(test) {
-//			
-//		}
-//	}
+	
+	
+	@PostMapping("/{idClient}/saveMesureClient")
+	public MesureDTODetails saveMesureClient(@PathVariable long idClient,@RequestBody MesureDTO mesureDTO) {
+		Optional<Client> oClient =clientRepository.findById(idClient);
+		if(!oClient.isPresent())
+			throw new NotExistException("Ce client n'existe pas");
+		Client client =oClient.get();
+		Mesure mesure=modelMapper.map(mesureDTO,Mesure.class);
+		for (Mesure mesure1 : client.getMesures()) {
+			if(mesure.equals(mesure1)) {
+				mesure=mesure1;
+				break;
+			}
+		}
+		mesure.setClient(client);
+		mesure=mesureRepository.save(mesure);
+		
+		return modelMapper.map(mesure,MesureDTODetails.class);
+		
+	}
 	
 	@GetMapping(path="/deleteClient/{idClient}")
 	public boolean deleteClient(@PathVariable long idClient) {

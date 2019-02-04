@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -38,7 +40,14 @@ public class Collection implements Serializable{
 	@JoinColumn(name="id_categorie",insertable=true,updatable=false)
 	private Categorie categorie;
 	
-	@OneToMany(mappedBy="collection",fetch=FetchType.LAZY)	
+	@ManyToMany(fetch = FetchType.LAZY,
+		    cascade = {
+		        CascadeType.PERSIST,
+		        CascadeType.REMOVE
+		    })
+			@JoinTable(name = "collection_modele",
+		    joinColumns = { @JoinColumn(name = "id_collection") },
+		    inverseJoinColumns = { @JoinColumn(name = "id_model") })
 	private List<Modele> models;
 
 	public Collection() {

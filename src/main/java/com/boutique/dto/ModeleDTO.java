@@ -1,6 +1,7 @@
 package com.boutique.dto;
 
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -11,7 +12,8 @@ public class ModeleDTO {
 	private long idModel;
 	private String nom;
 	private Date date;
-
+	
+	private List<ImageModeleDTO> images;
 
 	public ModeleDTO() {
 		super();
@@ -43,6 +45,16 @@ public class ModeleDTO {
 
 
 
+	public List<ImageModeleDTO> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ImageModeleDTO> images) {
+		this.images = images;
+	}
+
+
+	
 
 	
 	

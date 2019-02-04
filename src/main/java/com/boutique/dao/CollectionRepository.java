@@ -16,4 +16,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
 	
 	@Query("select c from Collection  c where c.nom like :nom and c.categorie.idCategorie=:idCategorie")
 	public Collection findNomIdCategorie(@Param("nom") String nom,@Param("idCategorie")long idCategorie);
+
+
 }

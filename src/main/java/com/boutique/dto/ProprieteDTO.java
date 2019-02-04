@@ -1,5 +1,6 @@
 package com.boutique.dto;
 
+
 import java.util.List;
 
 
@@ -12,7 +13,10 @@ public class ProprieteDTO {
 	private String valeur;
 
 	private Long preference;
-
+	
+	private String image;
+	
+	
 	public ProprieteDTO() {
 		super();
 	}
@@ -52,5 +56,17 @@ public class ProprieteDTO {
 	}
 
 	private List<LignePropriete> ligneProprietes;
+
+	public String getImage() {
+		return this.image;
+	}
+	
+	public String nameImage() {
+		return idPropriete+".jpg";
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 }

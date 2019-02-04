@@ -29,12 +29,17 @@ import com.boutique.dto.CommandeDTO;
 import com.boutique.dto.CommandeDTODetails;
 import com.boutique.dto.CommandeDTOSave;
 import com.boutique.dto.LigneCommandeDTODetais;
-import com.boutique.dto.LigneMesureDTO;
+
 import com.boutique.dto.LigneProprieteDTODetails;
+
+import com.boutique.dto.ProduitDTODetails;
+import com.boutique.dto.ProprieteDTO;
 import com.boutique.dto.TissuDTODetails;
+import com.boutique.exception.EchecOperation;
+import com.boutique.exception.NotExistException;
+import com.boutique.model.Client;
 import com.boutique.model.Commande;
 import com.boutique.model.LigneCommande;
-import com.boutique.model.LigneMesure;
 import com.boutique.model.LignePropriete;
 import com.boutique.model.LigneProprietePK;
 import com.boutique.model.Mesure;
@@ -42,6 +47,7 @@ import com.boutique.model.Modele;
 import com.boutique.model.Produit;
 import com.boutique.model.Propriete;
 import com.boutique.model.Tissu;
+
 
 @RestController
 @CrossOrigin
@@ -87,87 +93,112 @@ public class CommandeController {
 	public Optional<Commande> getEtatCommande(@PathVariable Long id) {
 		return cr.findById(id);
 	}
+	
+	@GetMapping(path = "/deleteCommande/{id}")
+	public boolean deleteCommande(@PathVariable Long id) {
+		 cr.deleteById(id);
+		return true;
+	}
 
 	@PostMapping(path = "/saveLigneCommande")
-	public LigneCommande saveLigneFournisseur(@RequestBody LigneCommande ligneCommande) {
+	public LigneCommande saveLigneCommande(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
+		LigneCommande ligneCommande = modelMapper.map(ligneCommandeDTO, LigneCommande.class);
+		Produit p=saveProduit(ligneCommandeDTO.getProduit());
 		return ligneCr.save(ligneCommande);
+	}
+	
+	public Produit saveProduit(ProduitDTODetails produitDT0)throws NotExistException {
+		Optional<Modele> omodel = modeleRepository.findById(produitDT0.getModele().getIdModel());
+		if (!omodel.isPresent()) {
+			throw new NotExistException("ce modele n'existe pas");
+		}
+		Produit produit = modelMapper.map(produitDT0, Produit.class);
+		produit.setModele(omodel.get());
+		
+		if(produitDT0.getMesure()!=null) {
+			Optional<Mesure> oMesure=mesureRepository.findById(produitDT0.getMesure().getIdMesure());
+			if(!oMesure.isPresent()) {
+				throw new NotExistException("ce mesure n'existe pas");
+			}
+			produit.setMesure(oMesure.get());
+			
+		}
+		
+		produitRepository.save(produit);
+		
+		if(produitDT0.getTissus()!=null) {
+			produit=saveProduitTissu(produit, produitDT0.getTissus());
+		}
+		if(produitDT0.getLigneProprietes()!=null) {
+			produit.setLigneProprietes(new ArrayList<>());
+			for (LigneProprieteDTODetails ligne : produitDT0.getLigneProprietes()) {
+				ProprieteDTO proprieteDTO=modelMapper.map(ligne, ProprieteDTO.class);
+				produit.getLigneProprietes().add(saveProduitPropriete(produit.getIdProduit(), proprieteDTO));
+			}
+		}
+		
+		
+		return produit;
+	}
+	
+
+	
+	public Produit saveProduitTissu(Produit produit,List<TissuDTODetails> tissus)throws NotExistException {
+
+			List<Tissu> listTissu=new ArrayList<>();
+			List<Produit> listProduit = new ArrayList<>();
+			listProduit.add(produit);
+			for (TissuDTODetails tisssuDTO : tissus) {
+				Optional<Tissu> oTissu = tissuRepository.findById(tisssuDTO.getIdTissu());
+				if(!oTissu.isPresent())
+					throw new NotExistException("ce tissu n'existe pas");
+				Tissu tissu=oTissu.get();
+				tissu.setProduits(listProduit);
+				tissu = tissuRepository.save(tissu);
+				listTissu.add(tissu);
+
+			}
+			produit.setTissus(listTissu);
+			return produit;
+	}
+	
+	public LignePropriete saveProduitPropriete(long idProduit,ProprieteDTO proprieteDTO)throws NotExistException {
+		Optional<Propriete> oPropriete = proprieteRepository.findById(proprieteDTO.getIdPropriete());
+		if(!oPropriete.isPresent())
+			throw new NotExistException("ce propriete n'existe pas");
+		Propriete propriete = modelMapper.map(oPropriete.get(), Propriete.class);
+		LignePropriete lignePropriete = new LignePropriete();
+		LigneProprietePK idLignePropriete = new LigneProprietePK();
+		idLignePropriete.setIdProduit(idProduit);
+		idLignePropriete.setIdPropriete(propriete.getIdPropriete());
+		lignePropriete.setLignePropiretePK(idLignePropriete);
+		lignePropriete.setPropriete(propriete);
+		return ligneProprieteRepository.save(lignePropriete);
 	}
 
 	@PostMapping(path = "/saveCommande")
-	public CommandeDTODetails saveModele(@RequestBody CommandeDTOSave commandeDTODetails) {
+	public CommandeDTODetails saveCommande(@RequestBody CommandeDTOSave commandeDTODetails) {
 
 		Commande commande = modelMapper.map(commandeDTODetails, Commande.class);
 		commande = cr.save(commande);
-		commande.setClient(clientRepository.findById(commandeDTODetails.getClient().getIdClient()).get());
-
-		int i = 0;
-		for (LigneCommandeDTODetais ligne : commandeDTODetails.getLigneCommandes()) {
-			LigneCommande ligneCommande = modelMapper.map(ligne, LigneCommande.class);
-			Produit produit = modelMapper.map(ligne.getProduit(), Produit.class);
-			// model
-			Optional<Modele> omodel = modeleRepository.findById(ligne.getProduit().getModele().getIdModel());
-			if (omodel.isPresent()) {
-				Modele model = omodel.get();
-				produit.setModele(model);
-				// Mesure
-				if (ligne.getProduit().getMesure() != null) {
-					Mesure mesure = modelMapper.map(ligne.getProduit().getMesure(), Mesure.class);
-					mesure.setClient(commande.getClient());
-					mesure = mesureRepository.save(mesure);
-					mesure.setLigneMesures(new ArrayList<>());
-					for (LigneMesureDTO ligneMesureDTO : ligne.getProduit().getMesure().getLigneMesures()) {
-						LigneMesure ligneMesure = ligneMesureRepository.findByMesurePropriete(mesure.getIdMesure(),
-								ligneMesureDTO.getProprieteMesure());
-						if (ligneMesure != null) {
-							ligneMesureDTO.setIdLigneMesure(ligneMesure.getIdLigneMesure());
-						}
-						ligneMesure = modelMapper.map(ligneMesureDTO, LigneMesure.class);
-						ligneMesure.setMesure(mesure);
-						ligneMesure = ligneMesureRepository.save(ligneMesure);
-						mesure.getLigneMesures().add(ligneMesure);
-					}
-					produit.setMesure(mesure);
-				}
-
-				produit.setTissus(null);
-				produit = produitRepository.save(produit);
-				// propriete
-				if (ligne.getProduit().getLigneProprietes() != null) {
-					List<LignePropriete> ligneProprietes = new ArrayList<>();
-					for (LigneProprieteDTODetails lignePDD : ligne.getProduit().getLigneProprietes()) {
-						LignePropriete lignePropriete = new LignePropriete();
-						Propriete propriete = modelMapper.map(lignePDD.getPropriete(), Propriete.class);
-						propriete = proprieteRepository.findById(propriete.getIdPropriete()).get();
-						lignePropriete.setPropriete(propriete);
-						LigneProprietePK idLignePropriete = new LigneProprietePK();
-						idLignePropriete.setIdProduit(produit.getIdProduit());
-						idLignePropriete.setIdPropriete(propriete.getIdPropriete());
-						lignePropriete.setLignePropiretePK(idLignePropriete);
-						ligneProprietes.add(ligneProprieteRepository.save(lignePropriete));
-					}
-					produit.setLigneProprietes(ligneProprietes);
-				}
-				// tissu
-				if (ligne.getProduit().getTissus() != null) {
-					produit.setTissus(new ArrayList<>());
-					List<Produit> listProduit = new ArrayList<>();
-					listProduit.add(produit);
-					for (TissuDTODetails tisssuDTODetails : ligne.getProduit().getTissus()) {
-						Tissu tissu = tissuRepository.findById(tisssuDTODetails.getIdTissu()).get();
-						tissu.setProduits(listProduit);
-						tissu = tissuRepository.save(tissu);
-						produit.getTissus().add(tissu);
-
-					}
-
-				}
-
-				ligneCommande.setProduit(produit);
-				ligneCommande.setCommande(commande);
-				commande.getLigneCommandes().set(i, ligneCr.save(ligneCommande));
-				i++;
-			}
+		Optional<Client> oClient=clientRepository.findById(commandeDTODetails.getClient().getIdClient());
+		if(oClient.isPresent()) {
+			throw new NotExistException("Ce client n'existe pas");
 		}
+		commande.setClient(oClient.get());
+		
+		try {
+			commande.setLigneCommandes(new ArrayList<>());
+			for (LigneCommandeDTODetais ligne : commandeDTODetails.getLigneCommandes()) {
+					
+					commande.getLigneCommandes().add(saveLigneCommande(ligne));
+				
+			}
+		} catch (Exception e) {
+			deleteCommande(commande.getIdCommande());
+			throw new EchecOperation("Ajout Client");
+		}
+		
 
 		return modelMapper.map(commande, CommandeDTODetails.class);
 	}
