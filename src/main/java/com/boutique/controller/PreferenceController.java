@@ -43,7 +43,6 @@ import com.boutique.model.Propriete;
 import com.boutique.service.FileStorageService;
 
 @RestController
-@RequestMapping
 @CrossOrigin
 public class PreferenceController {
 

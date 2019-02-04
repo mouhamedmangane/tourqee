@@ -30,7 +30,6 @@ import com.boutique.service.FileStorageService;
 
 @RestController
 @CrossOrigin
-@RequestMapping
 public class TypeTissuController {
 	
 	private static final ModelMapper modelMapper = new ModelMapper();

@@ -22,7 +22,6 @@ public class ImageModeleDTO {
 	}
 
 
-
 	public String getNom() {
 		return nom;
 	}

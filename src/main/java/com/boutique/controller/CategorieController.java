@@ -22,7 +22,6 @@ import com.boutique.exception.NotExistException;
 import com.boutique.model.Categorie;
 
 @RestController
-@RequestMapping
 @CrossOrigin
 public class CategorieController {
 	

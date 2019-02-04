@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.text.translate.NumericEntityUnescaper.OPTION;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +40,7 @@ import com.boutique.model.TypeTissu;
 import com.boutique.service.FileStorageService;
 
 @RestController
+@CrossOrigin
 public class ModeleController {
 	private static final ModelMapper modelMapper = new ModelMapper();
 
@@ -78,13 +77,45 @@ public class ModeleController {
 
 	@GetMapping(path = "/getModeleById/{id}")
 	public ModeleDTODetails getModel(@PathVariable("id") Long id) {
+		Optional<Modele> oModel=mr.findById(id);
+		if(oModel.isPresent()) {
+			new NotExistException("le model n existe pas");
+		}
 		return modelMapper.map(mr.findById(id).get(), ModeleDTODetails.class);
 	}
 
 	@PostMapping(value = "/saveModeleImage", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ModeleDTODetails saveModele(@RequestPart("modele") ModeleDTODetails modeleDTODetails,@RequestPart("images") List<MultipartFile>  files) throws Exception {
+	public ModeleDTODetails saveModeleImage(@RequestPart("modele") ModeleDTODetails modeleDTODetails,@RequestPart("images") List<MultipartFile>  files) throws Exception {
+			
+		try {
+			ModeleDTODetails mmodel= saveModele(modeleDTODetails);
+			Modele model= modelMapper.map(mmodel,Modele.class);
+			if (files != null) {
+				model.setImages(new ArrayList<>());
+				for (MultipartFile file : files) {
+					ImageModele image=new ImageModele();
+					image.setModele(model);
+					imr.save(image);
+					fileStorageService.storeFile(file, PathImage.MODELE.toString(),image.nameImage());
+					model.getImages().add(image);
+				}
+				
+			} else {
+				System.out.println("image no saved");
+			}
+			return modelMapper.map(model, ModeleDTODetails.class);
+		} catch (Exception e) {
+			throw e;
+			
+		}
+	}
+	@PostMapping("/saveModele")
+	public ModeleDTODetails saveModele(@RequestBody ModeleDTODetails modeleDTODetails){
+		System.out.println("model :"+modeleDTODetails.getNom());
+		
 		ModeleDTO modelDTO = modelMapper.map(modeleDTODetails, ModeleDTO.class);
 		Modele model = modelMapper.map(modelDTO, Modele.class);
+		System.out.println("model :"+modeleDTODetails.getNom());
 		model = mr.save(model);
 		
 		try {
@@ -114,25 +145,14 @@ public class ModeleController {
 
 				}
 			}
-			if (files != null) {
-				model.setImages(new ArrayList<>());
-				for (MultipartFile file : files) {
-					ImageModele image=new ImageModele();
-					image.setModele(model);
-					imr.save(image);
-					fileStorageService.storeFile(file, PathImage.MODELE.toString(),image.nameImage());
-					model.getImages().add(image);
-				}
-				
-			} else {
-				System.out.println("image no saved");
-			}
+
 		} catch (Exception e) {
 			deleteModele(model.getIdModel());
 		}
 
 		return modelMapper.map(model, ModeleDTODetails.class);
 	}
+
 
 	@PostMapping("/{idModele}/addPreferenceModele/{idPreference}")
 	public PreferenceDTO addPreferenceModel(@PathVariable("idModele") long idModele,

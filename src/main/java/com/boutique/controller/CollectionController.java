@@ -22,7 +22,7 @@ import com.boutique.exception.NotExistException;
 import com.boutique.model.Collection;
 
 @RestController
-@RequestMapping
+
 @CrossOrigin
 public class CollectionController {
 	

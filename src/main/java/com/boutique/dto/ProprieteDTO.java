@@ -68,10 +68,5 @@ public class ProprieteDTO {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-	public static void main(String [] args) {
-		ProprieteDTO p=new ProprieteDTO();
-		p.setIdPropriete(2L);
-		System.out.println(p.getImage());
-	}
+
 }
