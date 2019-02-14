@@ -1,6 +1,7 @@
 package com.boutique.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,8 @@ public class CategorieController {
 
 		}
 		categorie=modelMapper.map(categorieDTO, Categorie.class);
+		if(categorie.getDate() == null)
+			categorie.setDate(new Date());
 		return modelMapper.map(categoryRepository.save(categorie),CategorieDTO.class);
 	}
 	

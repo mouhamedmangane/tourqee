@@ -44,18 +44,20 @@ public class Modele implements Serializable{
     cascade = {
         CascadeType.PERSIST,
         CascadeType.MERGE
-    },
-    mappedBy = "models")
+    })
+	@JoinTable(name = "collection_modele",
+    joinColumns = { @JoinColumn(name = "id_model") },
+    inverseJoinColumns = { @JoinColumn(name = "id_collection") })
 	private	List<Collection> collections;
 	
 	@ManyToMany(cascade = {
 	        CascadeType.PERSIST,
+	        CascadeType.MERGE,
 	    })
-	@JoinTable(name = "model_preference",
-	        joinColumns = @JoinColumn(name = "id_model"),
-	        inverseJoinColumns = @JoinColumn(name = "id_preference")
-	    )
-	 private List<Preference> preferences;
+	@JoinTable(name = "modele_preference",
+    joinColumns = { @JoinColumn(name = "id_model") },
+    inverseJoinColumns = { @JoinColumn(name = "id_propriete") })
+	private List<Propriete> proprietes;
 	
 	
 	@OneToMany(mappedBy="modele")
@@ -107,14 +109,14 @@ public class Modele implements Serializable{
 	}
 	
 
-	public List<Preference> getPreferences() {
-		return preferences;
+	public List<Propriete> getProprietes() {
+		return proprietes;
 	}
 
 
 
-	public void setPreferences(List<Preference> preferences) {
-		this.preferences = preferences;
+	public void setProprietes (List<Propriete> proprietes) {
+		this.proprietes= proprietes;;
 	}
 		
 

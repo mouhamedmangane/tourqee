@@ -3,7 +3,7 @@ package com.boutique.dto;
 
 public class PreferenceDTO {
 
-	private Long idPreference;
+	private long idPreference;
 	
 	private String nom;
 	
@@ -13,12 +13,12 @@ public class PreferenceDTO {
 	}
 
 
-	public Long getIdPreference() {
+	public long getIdPreference() {
 		return idPreference;
 	}
 
 
-	public void setIdPreference(Long idPreference) {
+	public void setIdPreference(long idPreference) {
 		this.idPreference = idPreference;
 	}
 

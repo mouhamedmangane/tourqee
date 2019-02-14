@@ -3,25 +3,21 @@ package com.boutique.dto;
 import java.util.Date;
 import java.util.List;
 
+public class ModeleDTOFront {
 
-
-public class ModeleDTODetails {
 	private long idModel;
 	private String nom;
 	private Date date;
-	
-	
-	
 
-	private List<ProprieteDTODetails> proprietes;
-	
+	private List<PreferenceDTODetails> preferences;
+
 	private List<LigneModelTissuDTO> ligneModelTissus;
 
 	private List<CollectionDTO> collections;
-	
-	private	List<ImageModeleDTO> images;
-	
-	public ModeleDTODetails() {
+
+	private List<ImageModeleDTO> images;
+
+	public ModeleDTOFront() {
 		super();
 	}
 
@@ -49,16 +45,13 @@ public class ModeleDTODetails {
 		this.date = date;
 	}
 
-
-
-	public List<ProprieteDTODetails> getProprietes() {
-		return proprietes;
+	public List<PreferenceDTODetails> getPreferences() {
+		return preferences;
 	}
 
-	public void setProprietes(List<ProprieteDTODetails> preferences) {
-		this.proprietes = preferences;
+	public void setPreferences(List<PreferenceDTODetails> preferences) {
+		this.preferences = preferences;
 	}
-
 
 	public List<LigneModelTissuDTO> getLigneModelTissus() {
 		return ligneModelTissus;
@@ -83,10 +76,5 @@ public class ModeleDTODetails {
 	public void setImages(List<ImageModeleDTO> images) {
 		this.images = images;
 	}
-
-
-	
-	
-	
 	
 }

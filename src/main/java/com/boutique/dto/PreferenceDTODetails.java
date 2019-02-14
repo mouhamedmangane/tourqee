@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PreferenceDTODetails {
 	
-	private Long idPreference;
+	private long idPreference;
 	
 	private String nom;
 	
@@ -18,12 +18,12 @@ public class PreferenceDTODetails {
 	}
 
 
-	public Long getIdPreference() {
+	public long getIdPreference() {
 		return idPreference;
 	}
 
 
-	public void setIdPreference(Long idPreference) {
+	public void setIdPreference(long idPreference) {
 		this.idPreference = idPreference;
 	}
 

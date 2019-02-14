@@ -7,10 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -44,6 +48,12 @@ public class Propriete implements Serializable {
 	
 	@OneToMany(mappedBy="propriete")
 	private List<LignePropriete> ligneProprietes;
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST
+                },mappedBy="proprietes")
+	private List<Modele> models;
 	
 	@Transient
 	private String image;
@@ -106,6 +116,14 @@ public class Propriete implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public List<Modele> getModels() {
+		return models;
+	}
+
+	public void setModels(List<Modele> models) {
+		this.models = models;
 	}
 
 
