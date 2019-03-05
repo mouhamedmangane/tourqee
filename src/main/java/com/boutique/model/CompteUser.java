@@ -11,36 +11,35 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Compte implements Serializable {
+public class CompteUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
-	private long idCompte;
+	private long idCompteUser;
 	
 	@NotNull
 	private String login;
 	
 	@NotNull
 	private String mdp;
-	
-	@OneToOne(  fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_client")
-	private Client client;
-	
-	
 
-	public Compte() {
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user",nullable=true,updatable=true)
+	private User user;
+
+	public CompteUser() {
 		super();
 	}
 
-	public long getIdCompte() {
-		return idCompte;
+	public long getIdCompteUser() {
+		return idCompteUser;
 	}
 
-	public void setIdCompte(long idCompte) {
-		this.idCompte = idCompte;
+	public void setIdCompteUser(long idCompteUser) {
+		this.idCompteUser = idCompteUser;
 	}
 
 	public String getLogin() {
@@ -59,15 +58,15 @@ public class Compte implements Serializable {
 		this.mdp = mdp;
 	}
 
-	public Client getClient() {
-		return client;
+
+
+	public User getUser() {
+		return user;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setUser(User user) {
+		this.user = user;
 	}
-
-
 
 
 	

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,9 +77,15 @@ public class ClientController {
 		
 	}
 	
-	@GetMapping(path="/deleteClient/{idClient}")
+	@DeleteMapping(path="/deleteClient/{idClient}")
 	public boolean deleteClient(@PathVariable long idClient) {
 		clientRepository.deleteById(idClient);
+		return true;
+	}
+	
+	@DeleteMapping(path="/deleteClientAll")
+	public boolean deleteClientAll() {
+		clientRepository.deleteAll(); 
 		return true;
 	}
 	

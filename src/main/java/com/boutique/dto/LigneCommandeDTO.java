@@ -14,7 +14,7 @@ public class LigneCommandeDTO {
 	
 	private Produit produit;
 	
-	private Long commande;
+	private CommandeDTOSimple commande;
 
 
 
@@ -58,12 +58,12 @@ public class LigneCommandeDTO {
 	}
 
 
-	public Long getCommande() {
+	public CommandeDTOSimple getCommande() {
 		return commande;
 	}
 
 
-	public void setCommande(Long commande) {
+	public void setCommande(CommandeDTOSimple commande) {
 		this.commande = commande;
 	}
 

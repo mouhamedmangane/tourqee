@@ -1,6 +1,7 @@
 package com.boutique.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import com.boutique.dao.TissuRepository;
 import com.boutique.dto.CommandeDTO;
 import com.boutique.dto.CommandeDTODetails;
 import com.boutique.dto.CommandeDTOSave;
+import com.boutique.dto.CommandeDTOSimple;
 import com.boutique.dto.LigneCommandeDTODetais;
 
 import com.boutique.dto.LigneProprieteDTODetails;
@@ -99,11 +101,14 @@ public class CommandeController {
 		 cr.deleteById(id);
 		return true;
 	}
+	
+	
 
 	@PostMapping(path = "/saveLigneCommande")
 	public LigneCommande saveLigneCommande(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
 		LigneCommande ligneCommande = modelMapper.map(ligneCommandeDTO, LigneCommande.class);
 		Produit p=saveProduit(ligneCommandeDTO.getProduit());
+		ligneCommande.setProduit(p);
 		return ligneCr.save(ligneCommande);
 	}
 	
@@ -180,27 +185,42 @@ public class CommandeController {
 	public CommandeDTODetails saveCommande(@RequestBody CommandeDTOSave commandeDTODetails) {
 
 		Commande commande = modelMapper.map(commandeDTODetails, Commande.class);
-		commande = cr.save(commande);
+		commande.setDateDebut(new Date());
+		if(commande.getDateDebut().after(commande.getDateFin())) {
+			throw new RuntimeException("La date d'enregistement de la commande ne peut pas etre superieur a la date de delivrance :"+
+										commande.getDateDebut()+"  >   "+commande.getDateFin());
+		}
 		Optional<Client> oClient=clientRepository.findById(commandeDTODetails.getClient().getIdClient());
-		if(oClient.isPresent()) {
+		if(!oClient.isPresent()) {
 			throw new NotExistException("Ce client n'existe pas");
 		}
 		commande.setClient(oClient.get());
-		
+		commande = cr.save(commande);
 		try {
 			commande.setLigneCommandes(new ArrayList<>());
 			for (LigneCommandeDTODetais ligne : commandeDTODetails.getLigneCommandes()) {
-					
+					CommandeDTOSimple commandeDTOSimple = modelMapper.map(commande,CommandeDTOSimple.class);
+					ligne.setCommande(commandeDTOSimple);
 					commande.getLigneCommandes().add(saveLigneCommande(ligne));
 				
 			}
 		} catch (Exception e) {
 			deleteCommande(commande.getIdCommande());
-			throw new EchecOperation("Ajout Client");
+			throw e;
+			//throw new EchecOperation("Ajout Client");
 		}
 		
 
 		return modelMapper.map(commande, CommandeDTODetails.class);
+	}
+	
+	@GetMapping(path = "/getCommandeById/{id}")
+	public CommandeDTODetails getCommandeById(@PathVariable Long id) {
+		 Optional<Commande> oCommande  =  cr.findById(id);
+		 if  (!oCommande.isPresent()) {
+			 throw new NotExistException("cette commande n'existe pas");
+		 }
+		return modelMapper.map(oCommande.get(), CommandeDTODetails.class);
 	}
 
 	@PutMapping(path = "/updateEtatCommande")

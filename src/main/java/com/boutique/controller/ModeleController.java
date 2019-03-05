@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import com.boutique.dao.PreferenceRepository;
 import com.boutique.dao.ProprieteRepository;
 import com.boutique.dao.TypeTissuRepository;
 import com.boutique.dto.CollectionDTO;
+import com.boutique.dto.ImageModeleDTO;
 import com.boutique.dto.LigneModelTissuDTO;
 import com.boutique.dto.ModeleDTO;
 import com.boutique.dto.ModeleDTODetails;
@@ -209,6 +211,27 @@ public class ModeleController {
 		
 		return listPreferenceDD;
 	}
+	
+	@PostMapping(value="/{idModele}/addImage")
+	public ImageModeleDTO addImage(@PathVariable long idModele,@RequestParam("image") MultipartFile file) {
+		System.out.println("\\aaaaaaaaaaaaaaaaaa\n\n");
+		Optional<Modele> oModele = mr.findById(idModele);
+		if (!oModele.isPresent()) {
+			throw new NotExistException("modele " + idModele + " does not exist");
+		}
+		
+		if(file == null  ) {
+			throw new NotExistException("file no presente");
+		}
+		ImageModele imageModele=new ImageModele();
+		imageModele.setModele(oModele.get());
+		imageModele=imr.save(imageModele);
+		System.out.println("image ajoute a labase "+imageModele.nameImage());
+		fileStorageService.storeFile(file, PathImage.MODELE.toString(),imageModele.nameImage());
+		
+		return modelMapper.map(imageModele, ImageModeleDTO.class);
+		
+	}
 
 	public Propriete addPreference(Modele modele, long idPref) {
 		Optional<Propriete> Oppref = proprieteRepository.findById(idPref);
@@ -337,6 +360,19 @@ public class ModeleController {
 		modele.setIdModel(id);
 
 		mr.deleteById(id);
+		return true;
+	}
+	@DeleteMapping("/deleteImageModele/{id}")
+	public boolean deleteImageModele(@PathVariable Long id) {
+		Optional<ImageModele> oImageModele= imr.findById(id);
+		if (!oImageModele.isPresent())
+			throw new NotExistException("ce Image n existe pas");
+		ImageModele image = oImageModele.get();
+		
+			imr.deleteById(image.getIdImage());
+			fileStorageService.deleteFile(PathImage.MODELE, image.nameImage());
+		
+
 		return true;
 	}
 }

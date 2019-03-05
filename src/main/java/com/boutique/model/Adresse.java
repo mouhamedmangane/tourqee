@@ -30,7 +30,7 @@ public class Adresse implements Serializable{
 	private String telephone;
 	
 	@NotNull
-	private String ville;
+	private String villa;
 	
 	@NotNull
 	private String pays;
@@ -72,12 +72,12 @@ public class Adresse implements Serializable{
 
 
 	public String getVille() {
-		return ville;
+		return villa;
 	}
 
 
 	public void setVille(String ville) {
-		this.ville = ville;
+		this.villa = ville;
 	}
 
 

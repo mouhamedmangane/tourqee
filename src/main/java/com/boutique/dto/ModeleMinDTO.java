@@ -1,13 +1,6 @@
 package com.boutique.dto;
 
 
-import java.util.Date;
-import java.util.List;
-
-
-
-
-
 public class ModeleMinDTO {
 	
 	private long idModel;

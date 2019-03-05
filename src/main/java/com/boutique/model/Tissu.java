@@ -43,8 +43,7 @@ public class Tissu implements Serializable {
 	
 	@ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
+                CascadeType.PERSIST
             },
             mappedBy = "tissus")
 	private List<Produit> produits;

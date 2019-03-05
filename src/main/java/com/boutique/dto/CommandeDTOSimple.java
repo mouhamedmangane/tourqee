@@ -3,22 +3,20 @@ package com.boutique.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.boutique.model.LigneCommande;
 
-public class CommandeDTODetails {
+public class CommandeDTOSimple {
+
 	private long idCommande;
 
 	private Date dateDebut;
 
 	private Date dateFin;
-	
 	private boolean etatCommande;
 
-	private ClientDTO client;
 
-	private List<LigneCommandeDTODetais> ligneCommandes;
-	
-	
-	public CommandeDTODetails() {
+
+	public CommandeDTOSimple() {
 		super();
 	}
 
@@ -54,22 +52,6 @@ public class CommandeDTODetails {
 		this.etatCommande = etatCommande;
 	}
 
-	public ClientDTO getClient() {
-		return client;
-	}
-
-	public void setClient(ClientDTO client) {
-		this.client = client;
-	}
-
-	public List<LigneCommandeDTODetais> getLigneCommandes() {
-		return ligneCommandes;
-	}
-
-	public void setLigneCommandes(List<LigneCommandeDTODetais> ligneCommandes) {
-		this.ligneCommandes = ligneCommandes;
-	}
-	
-	
 	
 }
+

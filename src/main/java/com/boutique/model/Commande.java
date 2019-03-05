@@ -29,9 +29,10 @@ public class Commande implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateFin;
 	private boolean etatCommande;
+	private boolean archiver;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="id_client",nullable=false,updatable=false)
+	@ManyToOne()
+	@JoinColumn(name="id_client",nullable=true)
 	private Client client;
 	
 	@OneToMany(mappedBy="commande",cascade=CascadeType.REMOVE)
@@ -88,6 +89,15 @@ public class Commande implements Serializable{
 	public void setLigneCommandes(List<LigneCommande> ligneCommandes) {
 		this.ligneCommandes = ligneCommandes;
 	}
+
+	public boolean isArchiver() {
+		return archiver;
+	}
+
+	public void setArchiver(boolean archiver) {
+		this.archiver = archiver;
+	}
+	
 	
 	
 	

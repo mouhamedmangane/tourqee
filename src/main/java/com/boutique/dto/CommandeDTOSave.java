@@ -1,6 +1,7 @@
 package com.boutique.dto;
 
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -10,7 +11,7 @@ public class CommandeDTOSave {
 
 	private List<LigneCommandeDTODetais> ligneCommandes;
 
-
+	private Date dateFin;
 
 
 	public List<LigneCommandeDTODetais> getLigneCommandes() {
@@ -32,6 +33,16 @@ public class CommandeDTOSave {
 	public CommandeDTOSave() {
 		super();
 	}
+
+	public Date getDateFin() {
+		return dateFin;
+	}
+
+	public void setDateFin(Date dateFin) {
+		this.dateFin = dateFin;
+	}
+	
+	
 	
 	
 }

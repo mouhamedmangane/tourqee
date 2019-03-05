@@ -26,12 +26,12 @@ public class LigneCommande implements Serializable{
 	private double prix;
 	
 	@ManyToOne(cascade=CascadeType.REMOVE)
-	@JoinColumn(name="id_produit",nullable=false,insertable=true)
+	@JoinColumn(name="id_produit",nullable=true,insertable=true)
 	private Produit produit;
 	
 	
 	@ManyToOne(cascade=CascadeType.REMOVE)
-	@JoinColumn(name="id_commande",insertable=true,updatable=false,nullable=false)
+	@JoinColumn(name="id_commande",insertable=true,updatable=true,nullable=true)
 	private Commande commande;
 	
 	

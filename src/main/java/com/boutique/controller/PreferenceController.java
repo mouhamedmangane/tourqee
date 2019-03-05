@@ -111,7 +111,23 @@ public class PreferenceController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(propriete, ProprieteDTODetails.class));
 	}
-
+	
+	@PostMapping(value = "/updateProprieteImage/{idPropriete}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean updatePropriete(@PathVariable("idPropriete") long id,@RequestPart("file") MultipartFile file) throws Exception  {
+		System.out.println("ddsqdqsdd");
+		Propriete propriete = new Propriete();
+		propriete.setIdPropriete(id);
+		if (!proprieteRepository.existsById(id))
+			throw new NotExistException("ce propriete n existe pas");
+		fileStorageService.deleteFile(PathImage.Propriete, propriete.nameImage());
+		if (file != null) {
+			fileStorageService.storeFile(file, PathImage.Propriete.toString(), propriete.nameImage());
+		} else {
+			System.out.println("image no saved");
+		}
+		return true;
+	}
+	
 	@GetMapping("/deletePreference/{id}")
 	public boolean deletePreference(@PathVariable long id) {
 		Optional<Preference> oPreference = pr.findById(id);
@@ -121,7 +137,7 @@ public class PreferenceController {
 		for (Propriete propriete : oPreference.get().getProprietes()) {
 			fileStorageService.deleteFile(PathImage.Propriete, propriete.nameImage());
 		}
-		pr.deleteById(id);
+		proprieteRepository.deleteById(id);
 		return true;
 	}
 
@@ -142,8 +158,10 @@ public class PreferenceController {
 	public boolean deletePropriete(@PathVariable long id) {
 		Propriete propriete = new Propriete();
 		propriete.setIdPropriete(id);
+		
 		if (!proprieteRepository.existsById(id))
 			throw new NotExistException("ce propriete n existe pas");
+		proprieteRepository.deleteById(id);
 		fileStorageService.deleteFile(PathImage.Propriete, propriete.nameImage());
 		return true;
 	}

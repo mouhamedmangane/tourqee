@@ -41,7 +41,7 @@ public class Produit implements Serializable{
 	private List<Tissu> tissus;
 	
 	@ManyToOne
-	@JoinColumn(name="mesure")
+	@JoinColumn(name="mesure",nullable=true)
 	private Mesure mesure;
 	
 	@OneToMany(mappedBy="produit",cascade=CascadeType.REMOVE)
