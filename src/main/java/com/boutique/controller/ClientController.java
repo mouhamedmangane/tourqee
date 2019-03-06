@@ -1,5 +1,6 @@
 package com.boutique.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,8 +97,14 @@ public class ClientController {
 	}
 	
 	@GetMapping(path="/getAllClient")
-	public List<Client> getAllClient() {
-		return clientRepository.findAll();
+	public List<ClientDTODetails> getAllClient() {
+		List<ClientDTODetails> list = new ArrayList<ClientDTODetails>();
+		for (Client client : clientRepository.findAll()) {
+			ClientDTODetails dto = modelMapper.map(client, ClientDTODetails.class);
+			list.add(dto);
+		}
+		
+		return list;
 		
 	}
 }

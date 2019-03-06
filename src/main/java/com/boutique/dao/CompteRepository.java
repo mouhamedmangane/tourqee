@@ -10,5 +10,5 @@ public interface CompteRepository extends JpaRepository<Compte, Long>{
 	
 	
 	@Query("select c from Compte c where c.login = :login and c.mdp = :mdp")
-	public Compte connexion(@Param("login")String  login,@Param("mdp")String mdp);
+	public Compte connexion(@Param("login")String  login,@Param("mdp")String mdp); 
 }
