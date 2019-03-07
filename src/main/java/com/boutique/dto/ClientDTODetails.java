@@ -6,11 +6,12 @@ import java.util.List;
 
 
 public class ClientDTODetails {
-private long idClient;
+	
+	private long idClient;
 	
 	private String nom;
 	
-	private String Prenom;
+	private String prenom;
 	
 	private String mail;
 	
@@ -49,11 +50,11 @@ private long idClient;
 	}
 
 	public String getPrenom() {
-		return Prenom;
+		return prenom;
 	}
 
 	public void setPrenom(String prenom) {
-		Prenom = prenom;
+		this.prenom = prenom;
 	}
 
 	public String getMail() {

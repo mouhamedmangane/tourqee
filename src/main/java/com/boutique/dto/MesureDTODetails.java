@@ -9,12 +9,21 @@ public class MesureDTODetails {
 
 	private Date date;
 
+	private String nom;
 	
 	private List<LigneMesureDTO> ligneMesures;
 	
 	private ClientDTO client;
 
+	
 
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
 
 	public long getIdMesure() {
 		return idMesure;

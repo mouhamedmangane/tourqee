@@ -91,8 +91,13 @@ public class ClientController {
 	}
 	
 	@GetMapping(path="/getClientById/{idClient}")
-	public Optional<Client> getClientById(@PathVariable long idClient) {
-		return clientRepository.findById(idClient);
+	public ClientDTODetails getClientById(@PathVariable long idClient) {
+		Optional<Client> oClient = clientRepository.findById(idClient);
+		if(!oClient.isPresent()) {
+			throw new NotExistException("ce client n'existe pas");
+		}
+		
+		return modelMapper.map(oClient.get(),ClientDTODetails.class);
 		
 	}
 	

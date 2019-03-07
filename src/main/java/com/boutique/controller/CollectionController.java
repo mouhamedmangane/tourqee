@@ -78,6 +78,16 @@ public class CollectionController {
 		return listCollectionDTO;
 	}
 	
+	@GetMapping(path="/getAllModeleVide")
+	public List<CollectionDTO> getAllModeleVide() {
+		List<Collection> listCollection=collectionRepository.findAll();
+		List<CollectionDTO> listCollectionDTO=new ArrayList<>();
+		for (Collection collection : listCollection) {
+			listCollectionDTO.add(modelMapper.map(collection, CollectionDTO.class));
+		}
+		return listCollectionDTO;
+	}
+	
 	@GetMapping(path="/getAllCollectionDetails")
 	public List<CollectionDTODetails> getAllCollectionDetails() {
 		List<Collection> listCollection=collectionRepository.findAll();

@@ -49,7 +49,7 @@ public class Client implements Serializable {
 	private List<Mesure> mesures;
 	
 	
-	@OneToMany(mappedBy="client")
+	@OneToMany(mappedBy="client",cascade=CascadeType.REMOVE)
 	private List<Commande> commandes;
 	
 
