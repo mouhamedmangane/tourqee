@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.CollectionRepository;
+import com.boutique.dao.ModeleRepository;
 import com.boutique.dto.CollectionDTO;
 import com.boutique.dto.CollectionDTODetails;
 import com.boutique.exception.NotExistException;
 import com.boutique.model.Collection;
+import com.boutique.model.Modele;
 
 @RestController
 
@@ -30,6 +32,9 @@ public class CollectionController {
 	
 	@Autowired
 	private CollectionRepository collectionRepository;
+	
+	@Autowired
+	private ModeleRepository modeleRepository;
 	
 	@PostMapping(path="/saveCollection")
 	public CollectionDTODetails saveCollection(@RequestBody CollectionDTODetails collectionDTODetails) {
@@ -76,6 +81,18 @@ public class CollectionController {
 			listCollectionDTO.add(modelMapper.map(collection, CollectionDTO.class));
 		}
 		return listCollectionDTO;
+	}
+	
+	@GetMapping(path="/modeleSansCollection")
+	public CollectionDTODetails allwithoutCollection()  {
+		Collection collection =new Collection();
+		collection.setIdCollection(-1);
+		collection.setNom("sans collection");
+		List<Modele> list=modeleRepository.getAllModeleSansCollection();
+		collection.setModels(list);
+
+		return modelMapper.map(collection,CollectionDTODetails.class);
+		
 	}
 	
 	@GetMapping(path="/getAllModeleVide")

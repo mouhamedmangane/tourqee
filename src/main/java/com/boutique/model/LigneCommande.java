@@ -30,7 +30,7 @@ public class LigneCommande implements Serializable{
 	private Produit produit;
 	
 	
-	@ManyToOne(cascade=CascadeType.REMOVE)
+	@ManyToOne()
 	@JoinColumn(name="id_commande",insertable=true,updatable=true,nullable=true)
 	private Commande commande;
 	

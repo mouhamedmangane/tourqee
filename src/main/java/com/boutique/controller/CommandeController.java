@@ -31,7 +31,7 @@ import com.boutique.dto.CommandeDTODetails;
 import com.boutique.dto.CommandeDTOSave;
 import com.boutique.dto.CommandeDTOSimple;
 import com.boutique.dto.LigneCommandeDTODetais;
-
+import com.boutique.dto.LigneMesureDTO;
 import com.boutique.dto.LigneProprieteDTODetails;
 
 import com.boutique.dto.ProduitDTODetails;
@@ -42,6 +42,7 @@ import com.boutique.exception.NotExistException;
 import com.boutique.model.Client;
 import com.boutique.model.Commande;
 import com.boutique.model.LigneCommande;
+import com.boutique.model.LigneMesure;
 import com.boutique.model.LignePropriete;
 import com.boutique.model.LigneProprietePK;
 import com.boutique.model.Mesure;
@@ -54,6 +55,7 @@ import com.boutique.model.Tissu;
 @RestController
 @CrossOrigin
 public class CommandeController {
+	
 	private static final ModelMapper modelMapper = new ModelMapper();
 
 	@Autowired
@@ -85,6 +87,8 @@ public class CommandeController {
 
 	@Autowired
 	private LigneMesureRepository ligneMesureRepository;
+	
+
 
 	@GetMapping(path = "/getListCommande")
 	public List<Commande> getListCommande() {
@@ -102,14 +106,34 @@ public class CommandeController {
 		return true;
 	}
 	
-	
-
 	@PostMapping(path = "/saveLigneCommande")
+	public LigneCommandeDTODetais saveLigneCommandeDD(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
+		
+		LigneCommande ligneCommande = modelMapper.map(ligneCommandeDTO, LigneCommande.class);
+		for (LigneMesure ligneMesure : ligneCommande.getProduit().getMesure().getLigneMesures()) {
+			System.out.println("ligne mesure   "+ligneMesure.getValeur());
+			System.out.println("ligne msure   "+ligneMesure.getProprieteMesure());
+		}
+		Produit p=saveProduit(ligneCommandeDTO.getProduit());
+		ligneCommande.setProduit(p);
+		return modelMapper.map(ligneCr.save(ligneCommande),LigneCommandeDTODetais.class);
+	}
+
 	public LigneCommande saveLigneCommande(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
 		LigneCommande ligneCommande = modelMapper.map(ligneCommandeDTO, LigneCommande.class);
 		Produit p=saveProduit(ligneCommandeDTO.getProduit());
 		ligneCommande.setProduit(p);
 		return ligneCr.save(ligneCommande);
+	}
+	
+	@GetMapping(path= "/deleteLigneCommandeById/{id}")
+	public boolean deleteLigneCommandeById(@PathVariable long id) {
+		Optional<LigneCommande> oLigne = ligneCr.findById(id);
+		if(!oLigne.isPresent()) {
+			throw new NotExistException("ligneCommande not exist ");
+		}
+		ligneCr.deleteById(id);
+		return true;
 	}
 	
 	public Produit saveProduit(ProduitDTODetails produitDT0)throws NotExistException {
@@ -121,11 +145,16 @@ public class CommandeController {
 		produit.setModele(omodel.get());
 		
 		if(produitDT0.getMesure()!=null) {
-			Optional<Mesure> oMesure=mesureRepository.findById(produitDT0.getMesure().getIdMesure());
-			if(!oMesure.isPresent()) {
-				throw new NotExistException("ce mesure n'existe pas");
+			Mesure mesure = mesureRepository.save(produit.getMesure());
+			ArrayList<LigneMesure> list = new ArrayList<>();
+			for (LigneMesure ligneMesure : produit.getMesure().getLigneMesures()) {
+				System.out.println("ligne mesure   "+ligneMesure.getValeur());
+				System.out.println("ligne msure   "+ligneMesure.getProprieteMesure());
+				ligneMesure.setMesure(mesure);
+				list.add(ligneMesureRepository.save(ligneMesure));
 			}
-			produit.setMesure(oMesure.get());
+			mesure.setLigneMesures(list);
+			produit.setMesure(mesure);
 			
 		}
 		
