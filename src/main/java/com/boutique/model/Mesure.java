@@ -27,6 +27,8 @@ public class Mesure implements Serializable{
 	@GeneratedValue
 	private long idMesure;
 	
+	private String nom;
+	
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
@@ -73,6 +75,20 @@ public class Mesure implements Serializable{
 
 	public void setLigneMesures(List<LigneMesure> ligneMesures) {
 		this.ligneMesures = ligneMesures;
+	}
+	
+	
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override

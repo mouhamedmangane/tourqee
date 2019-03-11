@@ -11,7 +11,7 @@ public class LigneCommandeDTODetais {
 	
 	private ProduitDTODetails produit;
 	
-
+	private CommandeDTOSimple commande;
 
 	public LigneCommandeDTODetais() {
 		super();
@@ -56,6 +56,19 @@ public class LigneCommandeDTODetais {
 	public void setProduit( ProduitDTODetails produit) {
 		this.produit = produit;
 	}
+
+
+	public CommandeDTOSimple getCommande() {
+		return commande;
+	}
+
+
+	public void setCommande(CommandeDTOSimple commande) {
+		this.commande = commande;
+	}
+	
+	
+	
 
 
 

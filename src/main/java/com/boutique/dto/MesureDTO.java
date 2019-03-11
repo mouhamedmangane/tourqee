@@ -13,7 +13,10 @@ public class MesureDTO {
 
 	private Date date;
 
+	private String nom;
 	
+	
+
 	private List<LigneMesureDTO> ligneMesures;
 
 	public MesureDTO() {
@@ -26,6 +29,13 @@ public class MesureDTO {
 
 	public void setIdMesure(long idMesure) {
 		this.idMesure = idMesure;
+	}
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
 	public Date getDate() {

@@ -48,7 +48,7 @@ public class Client implements Serializable {
 	@OneToMany(mappedBy="client")
 	private List<Mesure> mesures;
 	
-	@JsonBackReference
+	
 	@OneToMany(mappedBy="client",cascade=CascadeType.REMOVE)
 	private List<Commande> commandes;
 	

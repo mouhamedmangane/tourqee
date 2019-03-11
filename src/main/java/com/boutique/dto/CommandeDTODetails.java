@@ -10,6 +10,7 @@ public class CommandeDTODetails {
 	private Date dateDebut;
 
 	private Date dateFin;
+	
 	private boolean etatCommande;
 
 	private ClientDTO client;

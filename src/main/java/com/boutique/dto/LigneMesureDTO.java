@@ -32,6 +32,16 @@ public class LigneMesureDTO {
 	public void setProprieteMesure(ProprieteMesure proprieteMesure) {
 		this.proprieteMesure = proprieteMesure;
 	}
+	
+	public void setProprieteMesure(String proprieteMesure) {
+		ProprieteMesure []tab=ProprieteMesure.values();
+		for (int i = 0; i < tab.length; i++) {
+			if(tab[i].toString().equals(proprieteMesure)) {
+				this.proprieteMesure = tab[i];
+				break;
+			}
+		}
+	}
 
 	public double getValeur() {
 		return valeur;

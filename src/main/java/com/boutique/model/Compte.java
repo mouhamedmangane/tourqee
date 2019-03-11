@@ -28,6 +28,8 @@ public class Compte implements Serializable {
 	@OneToOne(  fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_client")
 	private Client client;
+	
+	
 
 	public Compte() {
 		super();
@@ -64,6 +66,8 @@ public class Compte implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+
+
 
 
 	

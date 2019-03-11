@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.ClientRepository;
 import com.boutique.dao.CompteRepository;
+import com.boutique.dao.CompteUserRepository;
 import com.boutique.dto.CompteDTO;
 import com.boutique.dto.CompteDTODetails;
+import com.boutique.dto.CompteUserDTO;
+import com.boutique.dto.CompteUserDTODetails;
 import com.boutique.exception.NotExistException;
 import com.boutique.model.Compte;
+import com.boutique.model.CompteUser;
 
 @RestController
 @CrossOrigin
@@ -30,8 +34,11 @@ public class CompteController {
 	@Autowired
 	private ClientRepository clientRepository;
 	
+	@Autowired
+	private CompteUserRepository compteUserRepository;
 	
-	@PostMapping(path="/connexion")
+	
+	@PostMapping(path="/connexionClient")
 	public CompteDTODetails connexion(@RequestBody CompteDTO compteDTO) {
 		Compte compte= modelMapper.map(compteDTO,Compte.class);
 		compte=compteRepository.connexion(compte.getLogin(),compte.getMdp());
@@ -39,6 +46,17 @@ public class CompteController {
 			throw new NotExistException("client");
 		return modelMapper.map(compte,CompteDTODetails.class);
 	}
+	
+	@PostMapping(path="/connexionUser")
+	public CompteUserDTODetails connexion(@RequestBody CompteUserDTO compteUserDTO) {
+		CompteUser compte= modelMapper.map(compteUserDTO,CompteUser.class);
+		System.out.println(compte.getLogin()+"  "+compte.getMdp());
+		compte=compteUserRepository.connexion(compte.getLogin(),compte.getMdp());
+		if(compte==null)
+			throw new NotExistException("compte n existe pas");
+		return modelMapper.map(compte,CompteUserDTODetails.class);
+	}
+	
 	
 	@PostMapping(path="/updateCompte")
 	public CompteDTODetails saveCompte(@RequestBody CompteDTODetails compteDD) {

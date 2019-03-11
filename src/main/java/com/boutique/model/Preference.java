@@ -28,13 +28,7 @@ public class Preference implements Serializable{
 	@OneToMany(mappedBy="preference",cascade=CascadeType.ALL)
 	private List<Propriete> proprietes;  
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            },
-            mappedBy = "preferences")
-	private List<Modele> models;
+	
 	
 	
 	public Preference() {
@@ -70,13 +64,6 @@ public class Preference implements Serializable{
 
 
 
-	public List<Modele> getModels() {
-		return models;
-	}
-
-	public void setModels(List<Modele> models) {
-		this.models = models;
-	}
 	
 	
 	

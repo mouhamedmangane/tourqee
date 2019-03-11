@@ -43,11 +43,7 @@ public class Collection implements Serializable{
 	@ManyToMany(fetch = FetchType.LAZY,
 		    cascade = {
 		        CascadeType.PERSIST,
-		        CascadeType.REMOVE
-		    })
-			@JoinTable(name = "collection_modele",
-		    joinColumns = { @JoinColumn(name = "id_collection") },
-		    inverseJoinColumns = { @JoinColumn(name = "id_model") })
+		    }, mappedBy = "collections")		
 	private List<Modele> models;
 
 	public Collection() {

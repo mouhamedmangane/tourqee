@@ -13,7 +13,7 @@ public class ModeleDTODetails {
 	
 	
 
-	private List<PreferenceDTO> preferences;
+	private List<ProprieteDTODetails> proprietes;
 	
 	private List<LigneModelTissuDTO> ligneModelTissus;
 
@@ -51,12 +51,12 @@ public class ModeleDTODetails {
 
 
 
-	public List<PreferenceDTO> getPreferences() {
-		return preferences;
+	public List<ProprieteDTODetails> getProprietes() {
+		return proprietes;
 	}
 
-	public void setPreferences(List<PreferenceDTO> preferences) {
-		this.preferences = preferences;
+	public void setProprietes(List<ProprieteDTODetails> preferences) {
+		this.proprietes = preferences;
 	}
 
 

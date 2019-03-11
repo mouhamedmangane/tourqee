@@ -1,5 +1,6 @@
 package com.boutique.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,21 +78,38 @@ public class ClientController {
 		
 	}
 	
-	@GetMapping(path="/deleteClient/{idClient}")
+	@DeleteMapping(path="/deleteClient/{idClient}")
 	public boolean deleteClient(@PathVariable long idClient) {
 		clientRepository.deleteById(idClient);
 		return true;
 	}
 	
+	@DeleteMapping(path="/deleteClientAll")
+	public boolean deleteClientAll() {
+		clientRepository.deleteAll(); 
+		return true;
+	}
+	
 	@GetMapping(path="/getClientById/{idClient}")
-	public Optional<Client> getClientById(@PathVariable long idClient) {
-		return clientRepository.findById(idClient);
+	public ClientDTODetails getClientById(@PathVariable long idClient) {
+		Optional<Client> oClient = clientRepository.findById(idClient);
+		if(!oClient.isPresent()) {
+			throw new NotExistException("ce client n'existe pas");
+		}
+		
+		return modelMapper.map(oClient.get(),ClientDTODetails.class);
 		
 	}
 	
 	@GetMapping(path="/getAllClient")
-	public List<Client> getAllClient() {
-		return clientRepository.findAll();
+	public List<ClientDTODetails> getAllClient() {
+		List<ClientDTODetails> list = new ArrayList<ClientDTODetails>();
+		for (Client client : clientRepository.findAll()) {
+			ClientDTODetails dto = modelMapper.map(client, ClientDTODetails.class);
+			list.add(dto);
+		}
+		
+		return list;
 		
 	}
 }
