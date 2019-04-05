@@ -12,7 +12,6 @@ public class ProprieteDTO {
 	
 	private String valeur;
 
-	private Long preference;
 	
 	private String image;
 	
@@ -39,13 +38,7 @@ public class ProprieteDTO {
 
 
 
-	public Long getPreference() {
-		return preference;
-	}
 
-	public void setPreference(Long preference) {
-		this.preference = preference;
-	}
 
 	public List<LignePropriete> getLigneProprietes() {
 		return ligneProprietes;

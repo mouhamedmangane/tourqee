@@ -38,7 +38,7 @@ public class Adresse implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name="id_client")
-	private Client client;
+	private Personne personne;
 
 
 	public Long getIdAdresse() {
@@ -91,14 +91,27 @@ public class Adresse implements Serializable{
 	}
 
 
-	public Client getClient() {
-		return client;
+	public String getVilla() {
+		return villa;
 	}
 
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setVilla(String villa) {
+		this.villa = villa;
 	}
+
+
+	public Personne getPersonne() {
+		return personne;
+	}
+
+
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
+	}
+
+
+	
 	
 	
 }

@@ -3,8 +3,7 @@ package com.boutique.dto;
 import java.util.Date;
 import java.util.List;
 
-
-
+import com.boutique.model.EtatCommande;
 import com.boutique.model.LigneCommande;
 
 public class CommandeDTO {
@@ -14,9 +13,8 @@ public class CommandeDTO {
 	private Date dateDebut;
 
 	private Date dateFin;
-	private boolean etatCommande;
+	private EtatCommande etatCommande;
 
-	private Long idClient;
 
 	private List<LigneCommande> ligneCommandes;
 
@@ -48,21 +46,17 @@ public class CommandeDTO {
 		this.dateFin = dateFin;
 	}
 
-	public boolean isEtatCommande() {
+
+
+	public EtatCommande getEtatCommande() {
 		return etatCommande;
 	}
 
-	public void setEtatCommande(boolean etatCommande) {
+	public void setEtatCommande(EtatCommande etatCommande) {
 		this.etatCommande = etatCommande;
 	}
 
-	public Long getIdClient() {
-		return idClient;
-	}
 
-	public void setIdClient(Long client) {
-		this.idClient = client;
-	}
 
 	public List<LigneCommande> getLigneCommandes() {
 		return ligneCommandes;

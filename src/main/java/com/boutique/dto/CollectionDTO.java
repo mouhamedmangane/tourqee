@@ -4,6 +4,7 @@ import java.util.Date;
 
 
 public class CollectionDTO {
+	
 	private long idCollection;
 
 	private String nom;
