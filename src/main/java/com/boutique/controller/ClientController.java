@@ -23,6 +23,9 @@ import com.boutique.dto.CompteDTO;
 import com.boutique.dto.MesureDTO;
 import com.boutique.dto.MesureDTODetails;
 import com.boutique.exception.NotExistException;
+import com.boutique.mapper.ClientMapper;
+import com.boutique.mapper.CompteMapper;
+import com.boutique.mapper.MesureMapper;
 import com.boutique.model.Client;
 import com.boutique.model.Compte;
 import com.boutique.model.Mesure;
@@ -31,7 +34,6 @@ import com.boutique.model.Mesure;
 @CrossOrigin
 public class ClientController {
 	
-	private static final ModelMapper modelMapper = new ModelMapper();
 	
 	@Autowired
 	private ClientRepository clientRepository;
@@ -42,18 +44,25 @@ public class ClientController {
 	@Autowired
 	private CompteRepository compteRepository;
 	
+	@Autowired
+	private ClientMapper clientMapper;
+	@Autowired
+	private CompteMapper compteMapper;
+	@Autowired
+	private MesureMapper mesureMapper;
+	
 	@PostMapping(path="/saveClient")
 	public ClientDTODetails saveClient(@RequestBody ClientDTODetails clientDD) {
-		Client client= modelMapper.map(clientDD,Client.class);
+		Client client= clientMapper.clientDTODetailsToclientDTO(clientDD);
 		client.setCompte(null);
 		client=clientRepository.save(client);
 		if(clientDD.getCompte()!=null) {
-			Compte compte=modelMapper.map(clientDD.getCompte(),Compte.class);
-			compte.setClient(client);
+			Compte compte= compteMapper.compteDTOToCompte(clientDD.getCompte());
+			compte.setPersonne(client);
 			compteRepository.save(compte);
 			client.setCompte(compte);
 		}
-		return modelMapper.map(client,ClientDTODetails.class);
+		return clientMapper.clientToClientDTODetails(client);
 	}
 	
 	
@@ -64,7 +73,7 @@ public class ClientController {
 		if(!oClient.isPresent())
 			throw new NotExistException("Ce client n'existe pas");
 		Client client =oClient.get();
-		Mesure mesure=modelMapper.map(mesureDTO,Mesure.class);
+		Mesure mesure=mesureMapper.mesureDTOToMesure(mesureDTO);
 		for (Mesure mesure1 : client.getMesures()) {
 			if(mesure.equals(mesure1)) {
 				mesure=mesure1;
@@ -74,7 +83,7 @@ public class ClientController {
 		mesure.setClient(client);
 		mesure=mesureRepository.save(mesure);
 		
-		return modelMapper.map(mesure,MesureDTODetails.class);
+		return mesureMapper.mesureToMesureDTODetails(mesure);
 		
 	}
 	
@@ -96,8 +105,8 @@ public class ClientController {
 		if(!oClient.isPresent()) {
 			throw new NotExistException("ce client n'existe pas");
 		}
-		
-		return modelMapper.map(oClient.get(),ClientDTODetails.class);
+		Client client=oClient.get();
+		return clientMapper.clientToClientDTODetails(client);
 		
 	}
 	
@@ -105,7 +114,7 @@ public class ClientController {
 	public List<ClientDTODetails> getAllClient() {
 		List<ClientDTODetails> list = new ArrayList<ClientDTODetails>();
 		for (Client client : clientRepository.findAll()) {
-			ClientDTODetails dto = modelMapper.map(client, ClientDTODetails.class);
+			ClientDTODetails dto = clientMapper.clientToClientDTODetails(client);
 			list.add(dto);
 		}
 		

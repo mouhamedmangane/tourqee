@@ -27,9 +27,11 @@ import com.boutique.dao.ProduitRepository;
 import com.boutique.dao.ProprieteRepository;
 import com.boutique.dao.TissuRepository;
 import com.boutique.dto.CommandeDTO;
+import com.boutique.dto.CommandeDTOClient;
 import com.boutique.dto.CommandeDTODetails;
 import com.boutique.dto.CommandeDTOSave;
 import com.boutique.dto.CommandeDTOSimple;
+import com.boutique.dto.LigneCommandeDTOClient;
 import com.boutique.dto.LigneCommandeDTODetais;
 import com.boutique.dto.LigneMesureDTO;
 import com.boutique.dto.LigneProprieteDTODetails;
@@ -39,8 +41,10 @@ import com.boutique.dto.ProprieteDTO;
 import com.boutique.dto.TissuDTODetails;
 import com.boutique.exception.EchecOperation;
 import com.boutique.exception.NotExistException;
+import com.boutique.mapper.CommandeMapper;
 import com.boutique.model.Client;
 import com.boutique.model.Commande;
+import com.boutique.model.EtatCommande;
 import com.boutique.model.LigneCommande;
 import com.boutique.model.LigneMesure;
 import com.boutique.model.LignePropriete;
@@ -88,7 +92,8 @@ public class CommandeController {
 	@Autowired
 	private LigneMesureRepository ligneMesureRepository;
 	
-
+	@Autowired
+	private CommandeMapper commandeMapper;
 
 	@GetMapping(path = "/getListCommande")
 	public List<Commande> getListCommande() {
@@ -163,9 +168,9 @@ public class CommandeController {
 		if(produitDT0.getTissus()!=null) {
 			produit=saveProduitTissu(produit, produitDT0.getTissus());
 		}
-		if(produitDT0.getLigneProprietes()!=null) {
+		if(produitDT0.getProprietes()!=null) {
 			produit.setLigneProprietes(new ArrayList<>());
-			for (LigneProprieteDTODetails ligne : produitDT0.getLigneProprietes()) {
+			for (ProprieteDTO ligne : produitDT0.getProprietes()) {
 				ProprieteDTO proprieteDTO=modelMapper.map(ligne, ProprieteDTO.class);
 				produit.getLigneProprietes().add(saveProduitPropriete(produit.getIdProduit(), proprieteDTO));
 			}
@@ -213,13 +218,22 @@ public class CommandeController {
 	@PostMapping(path = "/saveCommande")
 	public CommandeDTODetails saveCommande(@RequestBody CommandeDTOSave commandeDTODetails) {
 
-		Commande commande = modelMapper.map(commandeDTODetails, Commande.class);
+		Commande commande = commandeMapper.commandeDTOSaveToCommande(commandeDTODetails);
 		commande.setDateDebut(new Date());
+		if(commande.getEtatCommande()==null) {
+			commande.setEtatCommande(EtatCommande.EN_COURS);
+		}
+		if(commande.getDateFin()== null) {
+			commande.setDateFin(new Date());
+			commande.setEtatCommande(EtatCommande.EN_ATTENTE);
+		}
+			
+		
 		if(commande.getDateDebut().after(commande.getDateFin())) {
 			throw new RuntimeException("La date d'enregistement de la commande ne peut pas etre superieur a la date de delivrance :"+
 										commande.getDateDebut()+"  >   "+commande.getDateFin());
 		}
-		Optional<Client> oClient=clientRepository.findById(commandeDTODetails.getClient().getIdClient());
+		Optional<Client> oClient=clientRepository.findById(commandeDTODetails.getClient().getIdPersonne());
 		if(!oClient.isPresent()) {
 			throw new NotExistException("Ce client n'existe pas");
 		}
@@ -229,6 +243,9 @@ public class CommandeController {
 			commande.setLigneCommandes(new ArrayList<>());
 			for (LigneCommandeDTODetais ligne : commandeDTODetails.getLigneCommandes()) {
 					CommandeDTOSimple commandeDTOSimple = modelMapper.map(commande,CommandeDTOSimple.class);
+					if(ligne.getProduit().getMesure()!=null) {
+						ligne.getProduit().getMesure().setClient(commandeDTODetails.getClient());
+					}
 					ligne.setCommande(commandeDTOSimple);
 					commande.getLigneCommandes().add(saveLigneCommande(ligne));
 				
@@ -243,6 +260,38 @@ public class CommandeController {
 		return modelMapper.map(commande, CommandeDTODetails.class);
 	}
 	
+	@PostMapping(path = "/saveCommandeClient")
+	public boolean saveCommandeClient(@RequestBody CommandeDTOClient commandeDTOClient) {
+		System.out.println("gffffffgfgf"+commandeDTOClient);
+		System.out.println(commandeDTOClient.getClient().getNom());
+		if(commandeDTOClient.getLigneCommandes()!=null) {
+			for (LigneCommandeDTOClient ligne : commandeDTOClient.getLigneCommandes()) {
+				System.out.println(ligne.getModel().getNom());
+				System.out.println(ligne.getQuantite());
+			}
+		}
+		Commande commande = commandeMapper.commandeDTOClientToCommande(commandeDTOClient);
+		System.out.println("ccccccccccccccccccccc");
+		if(commande.getLigneCommandes()!=null) {
+			System.out.println("ol");
+			for (LigneCommande ligne : commande.getLigneCommandes()) {
+				System.out.println("kkkkkkkk");
+				System.out.println(ligne.getProduit().getModele().getNom());
+				System.out.println(ligne.getQuantite());
+			}
+		}
+		CommandeDTOSave commandeDTOSave=commandeMapper.commandeToCommandeDtoSave(commande);
+		System.out.println("ddddddddddddddddddddddddddddddddddddddddd");
+		if(commandeDTOSave.getLigneCommandes()!=null) {
+			for (LigneCommandeDTODetais ligne : commandeDTOSave.getLigneCommandes()) {
+				System.out.println(ligne.getProduit().getModele().getNom());
+				System.out.println(ligne.getQuantite());
+			}
+		}
+			saveCommande(commandeDTOSave);
+			return true;
+		
+	}
 	@GetMapping(path = "/getCommandeById/{id}")
 	public CommandeDTODetails getCommandeById(@PathVariable Long id) {
 		 Optional<Commande> oCommande  =  cr.findById(id);
@@ -262,6 +311,26 @@ public class CommandeController {
 	public List<CommandeDTODetails> getAllCommande() {
 		List<CommandeDTODetails> listCommande = new ArrayList<>();
 		for (Commande commande : cr.findAll()) {
+			CommandeDTODetails l = modelMapper.map(commande, CommandeDTODetails.class);
+			listCommande.add(l);
+		}
+		return listCommande;
+	}
+	
+	@GetMapping("getAllCommandeByEtat/{etat}")
+	public List<CommandeDTODetails> getAllCommandeByEtat(@PathVariable("etat")EtatCommande etatCommande) {
+		List<CommandeDTODetails> listCommande = new ArrayList<>();
+		for (Commande commande : cr.findByEtat(etatCommande)) {
+			CommandeDTODetails l = modelMapper.map(commande, CommandeDTODetails.class);
+			listCommande.add(l);
+		}
+		return listCommande;
+	}
+	
+	@GetMapping("getAllCommandeByArchiver/{archiver}")
+	public List<CommandeDTODetails> getAllCommandeByEtat(@PathVariable("archiver")boolean archiver) {
+		List<CommandeDTODetails> listCommande = new ArrayList<>();
+		for (Commande commande : cr.findByArchiver(archiver)) {
 			CommandeDTODetails l = modelMapper.map(commande, CommandeDTODetails.class);
 			listCommande.add(l);
 		}

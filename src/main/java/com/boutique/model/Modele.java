@@ -1,6 +1,7 @@
 package com.boutique.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,12 @@ public class Modele implements Serializable{
 	private String nom;
 	
 	private Date date;
+	
+	private boolean sexe;
+	
+	private double prix;
+	
+	private String description;
 	
 	
 	@OneToMany(mappedBy="modele",fetch=FetchType.LAZY,cascade=CascadeType.REMOVE)
@@ -65,6 +72,7 @@ public class Modele implements Serializable{
 
 	public Modele() {
 		super();
+		images=new ArrayList<ImageModele>();
 	}
 
 
@@ -128,6 +136,42 @@ public class Modele implements Serializable{
 
 	public void setImages(List<ImageModele> images) {
 		this.images = images;
+	}
+
+	
+
+	public boolean isSexe() {
+		return sexe;
+	}
+
+
+
+	public void setSexe(boolean sexe) {
+		this.sexe = sexe;
+	}
+
+
+
+	public double getPrix() {
+		return prix;
+	}
+
+
+
+	public void setPrix(double prix) {
+		this.prix = prix;
+	}
+
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 

@@ -5,7 +5,6 @@ public class LigneModelTissuDTO {
 	
 
 	private long idLigneModelTissu;
-	private int partie;
 	
 	
 	private ModeleDTO modele;
@@ -24,14 +23,7 @@ public class LigneModelTissuDTO {
 	}
 
 
-	public int getPartie() {
-		return partie;
-	}
 
-
-	public void setPartie(int partie) {
-		this.partie = partie;
-	}
 
 
 	public ModeleDTO getModele() {

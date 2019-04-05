@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -28,11 +30,13 @@ public class Commande implements Serializable{
 	private Date dateDebut;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateFin;
-	private boolean etatCommande;
+	
+	@Enumerated(EnumType.STRING)
+	private EtatCommande etatCommande;
 	private boolean archiver;
 	
-	@ManyToOne()
-	@JoinColumn(name="id_client",nullable=true)
+	@ManyToOne
+	@JoinColumn(name="id_personne",nullable=true)
 	private Client client;
 	
 	@OneToMany(mappedBy="commande",cascade=CascadeType.REMOVE)
@@ -66,11 +70,13 @@ public class Commande implements Serializable{
 		this.dateFin = dateFin;
 	}
 
-	public boolean isEtatCommande() {
+
+
+	public EtatCommande getEtatCommande() {
 		return etatCommande;
 	}
 
-	public void setEtatCommande(boolean etatCommande) {
+	public void setEtatCommande(EtatCommande etatCommande) {
 		this.etatCommande = etatCommande;
 	}
 

@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.dao.ClientRepository;
 import com.boutique.dao.CompteRepository;
-import com.boutique.dao.CompteUserRepository;
 import com.boutique.dto.CompteDTO;
 import com.boutique.dto.CompteDTODetails;
-import com.boutique.dto.CompteUserDTO;
-import com.boutique.dto.CompteUserDTODetails;
 import com.boutique.exception.NotExistException;
 import com.boutique.model.Compte;
-import com.boutique.model.CompteUser;
 
 @RestController
 @CrossOrigin
@@ -33,35 +29,30 @@ public class CompteController {
 	
 	@Autowired
 	private ClientRepository clientRepository;
-	
-	@Autowired
-	private CompteUserRepository compteUserRepository;
-	
+		
 	
 	@PostMapping(path="/connexionClient")
 	public CompteDTODetails connexion(@RequestBody CompteDTO compteDTO) {
 		Compte compte= modelMapper.map(compteDTO,Compte.class);
+		System.out.println("comptedto");
+		System.out.println(compte.getLogin());
+		System.out.println(compte.getMdp());
 		compte=compteRepository.connexion(compte.getLogin(),compte.getMdp());
+		System.out.println("compte:");
+		System.out.println(compte.getLogin());
+		System.out.println(compte.getMdp());
 		if(compte==null)
-			throw new NotExistException("client");
+			throw new NotExistException("Le nom Utilisateur et le mot de passe ne correspondent pas");
 		return modelMapper.map(compte,CompteDTODetails.class);
 	}
 	
-	@PostMapping(path="/connexionUser")
-	public CompteUserDTODetails connexion(@RequestBody CompteUserDTO compteUserDTO) {
-		CompteUser compte= modelMapper.map(compteUserDTO,CompteUser.class);
-		System.out.println(compte.getLogin()+"  "+compte.getMdp());
-		compte=compteUserRepository.connexion(compte.getLogin(),compte.getMdp());
-		if(compte==null)
-			throw new NotExistException("compte n existe pas");
-		return modelMapper.map(compte,CompteUserDTODetails.class);
-	}
+
 	
 	
 	@PostMapping(path="/updateCompte")
 	public CompteDTODetails saveCompte(@RequestBody CompteDTODetails compteDD) {
 		Compte compte=modelMapper.map(compteDD, Compte.class);
-		if(!clientRepository.existsById(compteDD.getClient().getIdClient())) {
+		if(!clientRepository.existsById(compteDD.getClient().getIdPersonne())) {
 			throw new NotExistException("client");
 		}
 		return modelMapper.map(compteRepository.save(compte),CompteDTODetails.class);

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boutique.dao.CompteUserRepository;
+import com.boutique.dao.CompteRepository;
 import com.boutique.dao.RoleRepository;
 import com.boutique.dao.UserRepository;
 import com.boutique.dto.RoleDTO;
 import com.boutique.dto.UserDTO;
 import com.boutique.dto.UserDTODetails;
 import com.boutique.exception.NotExistException;
-import com.boutique.model.CompteUser;
+import com.boutique.model.Compte;
 import com.boutique.model.Role;
 import com.boutique.model.User;
 
@@ -36,7 +36,7 @@ public class UserController {
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
-	private CompteUserRepository compteUserRepository;
+	private CompteRepository compteRepository;
 	
 	@PostMapping("/saveUser")
 	public UserDTO saveUser(@RequestBody UserDTO userDTO) {
@@ -50,14 +50,14 @@ public class UserController {
 		User user = modelMapper.map(userDTO, User.class);
 		
 		user.setRoles(new ArrayList<>());
-		user.setCompteUser(null);
+		user.setCompte(null);
 		user = userRepository.save(user);
-		if(userDTO.getCompteUser() != null) {
+		if(userDTO.getCompte() != null) {
 			System.out.println("entrer dans user_compte");
-			CompteUser compteUser = modelMapper.map(userDTO.getCompteUser(),CompteUser.class);
-			compteUser.setUser(user);
-			compteUser=compteUserRepository.save(compteUser);
-			user.setCompteUser(compteUser);
+			Compte compte = modelMapper.map(userDTO.getCompte(),Compte.class);
+			compte.setPersonne(user);
+			compte=compteRepository.save(compte);
+			user.setCompte(compte);
 		}
 		if(userDTO.getRoles() != null) {
 			System.out.println("entere dans user_role");

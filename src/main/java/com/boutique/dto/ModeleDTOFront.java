@@ -8,10 +8,28 @@ public class ModeleDTOFront {
 	private long idModel;
 	private String nom;
 	private Date date;
+	private String description;
+	private boolean sexe;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isSexe() {
+		return sexe;
+	}
+
+	public void setSexe(boolean sexe) {
+		this.sexe = sexe;
+	}
 
 	private List<PreferenceDTODetails> preferences;
 
-	private List<LigneModelTissuDTO> ligneModelTissus;
+	private List<TypeTissuDTO> tissus;
 
 	private List<CollectionDTO> collections;
 
@@ -53,12 +71,14 @@ public class ModeleDTOFront {
 		this.preferences = preferences;
 	}
 
-	public List<LigneModelTissuDTO> getLigneModelTissus() {
-		return ligneModelTissus;
+
+
+	public List<TypeTissuDTO> getTissus() {
+		return tissus;
 	}
 
-	public void setLigneModelTissus(List<LigneModelTissuDTO> ligneModelTissus) {
-		this.ligneModelTissus = ligneModelTissus;
+	public void setTissus(List<TypeTissuDTO> tissus) {
+		this.tissus = tissus;
 	}
 
 	public List<CollectionDTO> getCollections() {

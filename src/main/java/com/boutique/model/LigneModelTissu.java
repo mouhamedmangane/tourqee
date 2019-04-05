@@ -21,7 +21,6 @@ public class LigneModelTissu implements Serializable {
 	@Id
 	@GeneratedValue
 	private long idLigneModelTissu;
-	private int partie;
 	
 	@ManyToOne
 	@JoinColumn(name="id_modele")
@@ -45,13 +44,6 @@ public class LigneModelTissu implements Serializable {
 		this.idLigneModelTissu = idLigneModelTissu;
 	}
 
-	public int getPartie() {
-		return partie;
-	}
-
-	public void setPartie(int partie) {
-		this.partie = partie;
-	}
 
 	public Modele getModele() {
 		return modele;

@@ -12,7 +12,8 @@ public class ModeleDTO {
 	private long idModel;
 	private String nom;
 	private Date date;
-	
+	private String description;
+	private boolean sexe;
 	private List<ImageModeleDTO> images;
 
 	public ModeleDTO() {
@@ -51,6 +52,22 @@ public class ModeleDTO {
 
 	public void setImages(List<ImageModeleDTO> images) {
 		this.images = images;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isSexe() {
+		return sexe;
+	}
+
+	public void setSexe(boolean sexe) {
+		this.sexe = sexe;
 	}
 
 

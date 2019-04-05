@@ -9,9 +9,27 @@ public class ModeleDTODetails {
 	private long idModel;
 	private String nom;
 	private Date date;
+	private String description;
+	private boolean sexe;
 	
 	
 	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isSexe() {
+		return sexe;
+	}
+
+	public void setSexe(boolean sexe) {
+		this.sexe = sexe;
+	}
 
 	private List<ProprieteDTODetails> proprietes;
 	

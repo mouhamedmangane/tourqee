@@ -26,8 +26,8 @@ public class Compte implements Serializable {
 	private String mdp;
 	
 	@OneToOne(  fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_client")
-	private Client client;
+	@JoinColumn(name = "id_personne")
+	private Personne personne;
 	
 	
 
@@ -59,12 +59,12 @@ public class Compte implements Serializable {
 		this.mdp = mdp;
 	}
 
-	public Client getClient() {
-		return client;
+	public Personne getPersonne() {
+		return personne;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
 	}
 
 

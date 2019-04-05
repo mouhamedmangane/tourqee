@@ -23,7 +23,6 @@ import com.boutique.dao.CollectionRepository;
 import com.boutique.dao.ImageModelesRepository;
 import com.boutique.dao.LigneModelTissuRepository;
 import com.boutique.dao.ModeleRepository;
-import com.boutique.dao.PreferenceRepository;
 import com.boutique.dao.ProprieteRepository;
 import com.boutique.dao.TypeTissuRepository;
 import com.boutique.dto.CollectionDTO;
@@ -32,13 +31,13 @@ import com.boutique.dto.LigneModelTissuDTO;
 import com.boutique.dto.ModeleDTO;
 import com.boutique.dto.ModeleDTODetails;
 import com.boutique.dto.ModeleDTOFront;
-import com.boutique.dto.PreferenceDTO;
 import com.boutique.dto.PreferenceDTODetails;
 import com.boutique.dto.ProprieteDTO;
 import com.boutique.dto.ProprieteDTODetails;
-import com.boutique.dto.TypeTissuDTO;
 import com.boutique.exception.NotExistException;
-import com.boutique.mapper.ModeleMappeur;
+import com.boutique.mapper.ModeleMapper;
+import com.boutique.mapper.PreferenceMapper;
+import com.boutique.mapper.ProprieteMapper;
 import com.boutique.mesImages.PathImage;
 import com.boutique.model.Collection;
 import com.boutique.model.ImageModele;
@@ -76,12 +75,21 @@ public class ModeleController {
 	
 	@Autowired
 	private ImageModelesRepository imr;
+	
+	@Autowired
+	private ModeleMapper modeleMapper;
+	
+	@Autowired
+	private PreferenceMapper preferenceMapper;
+	
+	@Autowired 
+	private ProprieteMapper proprieterMapper;
 
 	@GetMapping(name = "/getAllModele")
 	public List<ModeleDTOFront> getAllModel() {
 		List<ModeleDTOFront> listModele = new ArrayList<>();
 		for (Modele modele : mr.findAll()) {
-			ModeleDTOFront l= ModeleMappeur.convertModelDdToFront(modelMapper.map(modele, ModeleDTODetails.class));
+			ModeleDTOFront l= modeleMapper.modeleToModeleDTOFront(modele);
 			listModele.add(l);
 		}
 		return listModele;
@@ -93,7 +101,7 @@ public class ModeleController {
 		if(oModel.isPresent()) {
 			new NotExistException("le model n existe pas");
 		}
-		return ModeleMappeur.convertModelDdToFront(modelMapper.map(mr.findById(id).get(), ModeleDTODetails.class));
+		return modeleMapper.modeleToModeleDTOFront(mr.findById(id).get());
 	}
 
 	@PostMapping(value = "/saveModeleImage", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -140,7 +148,7 @@ public class ModeleController {
 		model = mr.save(model);
 		
 		try {
-
+			model.getCollections();
 			if (modeleDTOFront.getCollections() != null) {
 				model.setCollections(new ArrayList<>());
 				for (CollectionDTO collDTO : modeleDTOFront.getCollections()) {
@@ -150,23 +158,16 @@ public class ModeleController {
 			}
 			// ajout preference
 			if (modeleDTOFront.getPreferences() != null) {
-				List<ProprieteDTODetails>  proprietes= ModeleMappeur.convertProprietDTO(modeleDTOFront.getPreferences());
-				model.setProprietes(new ArrayList<>());
-				for (ProprieteDTODetails prefDTO : proprietes) {
-					model.getProprietes().add(addPreference(model, prefDTO.getIdPropriete()));
 
-				}
 
 			}
+			
 			// ajoute ListModelTissu
-			if (modeleDTOFront.getLigneModelTissus() != null) {
-				model.setLigneModelTissus(new ArrayList<>());
-				for (LigneModelTissuDTO ligneDTO : modeleDTOFront.getLigneModelTissus()) {
-					LigneModelTissu ligne = modelMapper.map(ligneDTO, LigneModelTissu.class);
-					model.getLigneModelTissus().add(addLigneModeleTissu(model, ligne));
+			if (modeleDTOFront.getTissus() != null) {
 
-				}
 			}
+			
+			model = mr.save(model);
 
 		} catch (Exception e) {
 			deleteModele(model.getIdModel());
@@ -203,7 +204,7 @@ public class ModeleController {
 		for (Propriete propriete : model.getProprietes()) {
 			System.out.println(propriete.getValeur());
 		}
-		List<Preference> listPreference = ModeleMappeur.converToPreference(model.getProprietes());
+		List<Preference> listPreference = null;
 		List<PreferenceDTODetails> listPreferenceDD =new ArrayList<>();
 		for (Preference pref : listPreference) {
 			listPreferenceDD.add(modelMapper.map(pref,PreferenceDTODetails.class));

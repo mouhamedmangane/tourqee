@@ -3,25 +3,26 @@ package com.boutique.dto;
 import java.util.List;
 
 public class ProduitDTODetails {
+	
 	private long idProduit;
 
 	private ModeleDTO modele;
 	
 	private List<TissuDTODetails> tissus;
 	
-	private MesureDTO mesure;
+	private MesureDTODetails mesure;
 	
-	private List<LigneProprieteDTODetails>  ligneProprietes;
+	private List<ProprieteDTO>  proprietes;
 
-	public long getIdProduit() {
-		return idProduit;
-	}
 	
 	
 	public ProduitDTODetails() {
 		super();
 	}
-
+	
+	public long getIdProduit() {
+		return idProduit;
+	}
 
 	public void setIdProduit(long idProduit) {
 		this.idProduit = idProduit;
@@ -47,21 +48,25 @@ public class ProduitDTODetails {
 	}
 
 
-	public MesureDTO getMesure() {
+	public MesureDTODetails getMesure() {
 		return mesure;
 	}
 
-	public void setMesure(MesureDTO mesure) {
+	public void setMesure(MesureDTODetails mesure) {
 		this.mesure = mesure;
 	}
 
-	public List<LigneProprieteDTODetails> getLigneProprietes() {
-		return ligneProprietes;
+
+	public List<ProprieteDTO> getProprietes() {
+		return proprietes;
 	}
 
-	public void setLigneProprietes(List<LigneProprieteDTODetails> ligneProprietes) {
-		this.ligneProprietes = ligneProprietes;
+
+	public void setProprietes(List<ProprieteDTO> proprietes) {
+		this.proprietes = proprietes;
 	}
+
+	
 	
 	
 }

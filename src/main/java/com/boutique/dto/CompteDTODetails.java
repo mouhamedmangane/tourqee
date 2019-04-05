@@ -8,7 +8,7 @@ public class CompteDTODetails {
 	
 	private String mdp;
 	
-	private ClientDTO client;
+	private PersonneDTO personne;
 
 	public CompteDTODetails() {
 		super();
@@ -38,12 +38,12 @@ public class CompteDTODetails {
 		this.mdp = mdp;
 	}
 
-	public ClientDTO getClient() {
-		return client;
+	public PersonneDTO getClient() {
+		return personne;
 	}
 
-	public void setClient(ClientDTO client) {
-		this.client = client;
+	public void setPersonne(PersonneDTO client) {
+		this.personne = client;
 	}
 	
 	
