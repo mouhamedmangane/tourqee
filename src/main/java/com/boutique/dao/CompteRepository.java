@@ -9,6 +9,6 @@ import com.boutique.model.Compte;
 public interface CompteRepository extends JpaRepository<Compte, Long>{
 	
 	
-	@Query("select c from Compte c where c.login = :login and c.mdp = :mdp")
+	@Query("select c from Compte c where c.login like :login and c.mdp = :mdp ")
 	public Compte connexion(@Param("login")String  login,@Param("mdp")String mdp); 
 }
