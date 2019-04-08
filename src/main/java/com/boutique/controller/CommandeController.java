@@ -110,7 +110,21 @@ public class CommandeController {
 		 cr.deleteById(id);
 		return true;
 	}
-	
+	@PostMapping(path = "/saveCommandeSimple/")
+	public boolean saveCommande(@RequestBody CommandeDTO commandeDTO) {
+		Optional<Commande> oCommande= cr.findById(commandeDTO.getIdCommande());
+		if(!oCommande.isPresent()) {
+			throw new NotExistException("ce Commande n'existe pas");
+		}
+		
+		Commande commande= oCommande.get();
+		if(commandeDTO.getDateFin()!=null)
+		commande.setEtatCommande(commandeDTO.getEtatCommande());
+		if(commandeDTO.getDateFin()!= null)
+			commande.setDateFin(commandeDTO.getDateFin());
+		cr.save(commande);
+		return true;
+	}
 	@PostMapping(path = "/saveLigneCommande")
 	public LigneCommandeDTODetais saveLigneCommandeDD(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
 		

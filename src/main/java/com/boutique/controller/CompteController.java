@@ -38,9 +38,7 @@ public class CompteController {
 		System.out.println(compte.getLogin());
 		System.out.println(compte.getMdp());
 		compte=compteRepository.connexion(compte.getLogin(),compte.getMdp());
-		System.out.println("compte:");
-		System.out.println(compte.getLogin());
-		System.out.println(compte.getMdp());
+
 		if(compte==null)
 			throw new NotExistException("Le nom Utilisateur et le mot de passe ne correspondent pas");
 		return modelMapper.map(compte,CompteDTODetails.class);
