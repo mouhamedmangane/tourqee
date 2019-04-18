@@ -7,6 +7,7 @@ public class ImageModeleDTO {
 	private long idImage;
 	private String nom;
 	private boolean defaut;
+	private int numero;
 	
 	
 	public ImageModeleDTO() {
@@ -37,6 +38,16 @@ public class ImageModeleDTO {
 	public void setDefaut(boolean defaut) {
 		this.defaut = defaut;
 	}
+
+	public int getNumero() {
+		return numero;
+	}
+
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
+	
+	
 	
 	
 	

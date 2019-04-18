@@ -114,5 +114,10 @@ public class CollectionController {
 		}
 		return listCollectionDTODetails;
 	}
+	
+	@GetMapping(path="/getCountCollection")
+	public long getCountCollection() {
+		return this.collectionRepository.count();
+	}
 
 }

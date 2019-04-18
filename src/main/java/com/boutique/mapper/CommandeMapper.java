@@ -31,6 +31,7 @@ public interface  CommandeMapper {
 	Commande commandeDTOSimpleToCommande(CommandeDTOSimple commandeDTOSimple);
 	
 	Commande commandeDTOClientToCommande(CommandeDTOClient commandeDTOClient);
+	CommandeDTOClient commandeToCommandeDTOClient(Commande commande);
 	
 	
 	

@@ -23,6 +23,7 @@ import com.boutique.model.Propriete;
 public interface ModeleMapper {
 	ModeleMapper INSTANCE = Mappers.getMapper(ModeleMapper.class);
 	
+	@Mapping(target="images",ignore=true)
 	ModeleDTO modeleToModeleDTO(Modele modele);
 	
 	@Mapping(target="images",ignore=true)

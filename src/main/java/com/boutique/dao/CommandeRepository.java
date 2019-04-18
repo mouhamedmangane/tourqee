@@ -1,6 +1,9 @@
 package com.boutique.dao;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +26,13 @@ public interface CommandeRepository extends JpaRepository<Commande, Long> {
 	@Query("update Commande c set c.archiver=:archiver")
 	public void archiver(@Param("archiver") boolean  archiver);
 	
+	@Query("select count(c) from Commande c where c.etatCommande like :etatCommande")
+	public int countCommandeByEtat(@Param("etatCommande") EtatCommande etatCommande);
+	
+	@Query(value="select month(date_fin) as mois,count(*)as nbre from commande  where year(date_fin) = :y group by mois",nativeQuery=true)
+	public Object[][] statistique(@Param("y") int annee); 
+	
+	
+	@Query("select c from Commande c where c.client.idPersonne = :idClient")
+	public List<Commande> getCommandeByClient(@Param("idClient")long idClient);
 }

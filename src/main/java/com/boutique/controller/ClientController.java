@@ -121,4 +121,9 @@ public class ClientController {
 		return list;
 		
 	}
+	
+	@GetMapping(path="/getCountClient")
+	public long getCountClient() {
+		return this.clientRepository.count();
+	}
 }

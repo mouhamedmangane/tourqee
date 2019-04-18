@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.boutique.model.Collection;
+import com.boutique.model.EtatCommande;
 
 public interface CollectionRepository extends JpaRepository<Collection, Long> {
 
@@ -16,6 +17,9 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
 	
 	@Query("select c from Collection  c where c.nom like :nom and c.categorie.idCategorie=:idCategorie")
 	public Collection findNomIdCategorie(@Param("nom") String nom,@Param("idCategorie")long idCategorie);
+	
+	@Query("select count(c) from Collection c ")
+	public int countCollection();
 
 
 }
