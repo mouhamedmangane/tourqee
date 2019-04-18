@@ -83,5 +83,10 @@ public class CategorieController {
 		}
 		return listCategorieDTODetails;
 	}
+	
+	@GetMapping(path="/getCountCategorie")
+	public long getCountCategorie() {
+		return this.categoryRepository.count();
+	}
 
 }

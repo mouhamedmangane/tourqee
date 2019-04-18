@@ -1,11 +1,17 @@
 package com.boutique.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import com.boutique.dto.ImageModeleDTO;
 import com.boutique.dto.LigneCommandeDTO;
 import com.boutique.dto.LigneCommandeDTOClient;
 import com.boutique.dto.LigneCommandeDTODetais;
+import com.boutique.dto.ModeleDTO;
+import com.boutique.model.ImageModele;
 import com.boutique.model.LigneCommande;
 import com.boutique.model.Modele;
 import com.boutique.model.Produit;
@@ -29,6 +35,21 @@ public interface LigneCommandeMapper {
 		p.setModele(modele);
 		ligneCommande.setProduit(p);
 		return ligneCommande;
+	}
+	default LigneCommandeDTOClient ligneCommandeToLigneCommandeDTOClient(LigneCommande ligneCommande) {
+		LigneCommandeDTOClient dtoClient=new LigneCommandeDTOClient();
+		dtoClient.setIdLigneCommande(ligneCommande.getIdLigneCommande());
+		dtoClient.setQuantite(ligneCommande.getQuantite());
+		ModeleDTO modeleDTO=ModeleMapper.INSTANCE.modeleToModeleDTO(ligneCommande.getProduit().getModele());
+		List<ImageModeleDTO> images= new ArrayList<ImageModeleDTO>();
+		for (ImageModele imageModele : ligneCommande.getProduit().getModele().getImages()) {
+			ImageModeleDTO image=new ImageModeleDTO();
+			image.setNom(imageModele.getNom());
+			images.add(image);
+		}
+		modeleDTO.setImages(images);
+		dtoClient.setModel(modeleDTO);
+		return dtoClient;
 	}
 	
 	

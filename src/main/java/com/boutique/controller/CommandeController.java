@@ -350,4 +350,25 @@ public class CommandeController {
 		}
 		return listCommande;
 	}
+	
+	@GetMapping(path="/getCountCommande/{etat}")
+	public long getCountClient(EtatCommande etatCommande) {
+		return this.cr.countCommandeByEtat(etatCommande);
+	}
+	
+	@GetMapping(path="getCommandeByClient/{idClient}")
+	public List<CommandeDTOClient>getCommandeByClient(@PathVariable("idClient") long idClient){
+		Optional<Client> oClient=this.clientRepository.findById(idClient);
+		if(!oClient.isPresent()) {
+			throw new NotExistException("Ce client n'existe pas");
+		}
+		List<CommandeDTOClient> listCommande = new ArrayList<>();
+		for (Commande commande : cr.getCommandeByClient(idClient)) {
+			CommandeDTOClient l = commandeMapper.commandeToCommandeDTOClient(commande);
+			listCommande.add(l);
+		}
+		return listCommande;
+	}
+	
+	
 }

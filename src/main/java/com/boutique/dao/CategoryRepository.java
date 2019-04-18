@@ -11,4 +11,7 @@ public interface CategoryRepository extends JpaRepository<Categorie, Long> {
 
 	@Query("select c from Categorie c where nom like :nom")
 	public Categorie findByNom(@Param("nom") String nom);
+	
+	@Query("select count(c) from Categorie c ")
+	public int countCategorie();
 }

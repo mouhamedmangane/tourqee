@@ -105,8 +105,7 @@ public class ModeleController {
 	}
 
 	@PostMapping(value = "/saveModeleImage", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ModeleDTOFront saveModeleImage(@RequestPart("modele") ModeleDTOFront modeleDTODetails,@RequestPart("images") List<MultipartFile>  files) throws Exception {
-			
+	public ModeleDTOFront saveModeleImage(@RequestPart("modele") ModeleDTOFront modeleDTODetails,@RequestPart("images") List<MultipartFile>  files) throws Exception {	
 		try {
 			ModeleDTOFront mmodel= saveModele(modeleDTODetails);
 			Modele model= modelMapper.map(mmodel,Modele.class);
@@ -114,18 +113,34 @@ public class ModeleController {
 			if (files != null) {
 				System.out.println("entrer dansn fi                    les");
 				model.setImages(new ArrayList<>());System.out.println("entrer bbbbbbbbbb"+files.size());
-				for (MultipartFile file : files) {
-					System.out.println("entrer bbbbbbbbbb");
-					ImageModele image=new ImageModele();
-					image.setModele(model);
-					if(i==0) {
-						image.setDefaut(true);
-						i=1;
+				for (ImageModeleDTO imageModeleDTO : modeleDTODetails.getImages()) {
+					if(imageModeleDTO.getNumero()>0) {
+						MultipartFile file= searchFile(files, imageModeleDTO.getNumero());
+						ImageModele image;
+						if(imageModeleDTO.getIdImage()>0) {
+							image = modelMapper.map(imageModeleDTO, ImageModele.class);
+							fileStorageService.deleteFile(PathImage.MODELE, image.nameImage());
+
+						}
+						else {
+							System.out.println("entrer bbbbbbbbbb");
+							image=new ImageModele();
+							image.setModele(model);
+							if(i==0) {
+								image.setDefaut(true);
+								i=1;
+							}
+							image=imr.save(image);
+						}
+						System.out.println("image ajoute a labase "+image.nameImage());
+
+							fileStorageService.storeFile(file, PathImage.MODELE.toString(),image.nameImage());
+							model.getImages().add(image);
 					}
-					image=imr.save(image);
-					System.out.println("image ajoute a labase "+image.nameImage());
-					fileStorageService.storeFile(file, PathImage.MODELE.toString(),image.nameImage());
-					model.getImages().add(image);
+					
+				}
+				for (MultipartFile file : files) {
+					
 				}
 				
 			} else {
@@ -136,6 +151,12 @@ public class ModeleController {
 			throw e;
 			
 		}
+	}
+	private MultipartFile searchFile(List<MultipartFile> files,int numero) {
+		if(numero>files.size())
+			return null;
+		else
+			return files.get(numero-1);
 	}
 	
 	@PostMapping("/saveModele")
@@ -228,6 +249,25 @@ public class ModeleController {
 		imageModele.setModele(oModele.get());
 		imageModele=imr.save(imageModele);
 		System.out.println("image ajoute a labase "+imageModele.nameImage());
+		fileStorageService.storeFile(file, PathImage.MODELE.toString(),imageModele.nameImage());
+		
+		return modelMapper.map(imageModele, ImageModeleDTO.class);
+		
+	}
+	@PostMapping(value="/{idImage}/updateImage")
+	public ImageModeleDTO updateImage(@PathVariable long idImage,@RequestParam("image") MultipartFile file) {
+		System.out.println("\\aaaaaaaaaaaaaaaaaa\n\n");
+		Optional<ImageModele> oImageModele = imr.findById(idImage);
+		if (!oImageModele.isPresent()) {
+			throw new NotExistException("Image " + idImage + " does not exist");
+		}
+		
+		if(file == null  ) {
+			throw new NotExistException("file no presente");
+		}
+		ImageModele imageModele= oImageModele.get();
+		System.out.println("image ajoute a labase "+imageModele.nameImage());
+		fileStorageService.deleteFile(PathImage.MODELE, imageModele.nameImage());
 		fileStorageService.storeFile(file, PathImage.MODELE.toString(),imageModele.nameImage());
 		
 		return modelMapper.map(imageModele, ImageModeleDTO.class);
@@ -375,5 +415,15 @@ public class ModeleController {
 		
 
 		return true;
+	}
+	
+	@GetMapping(path="/getCountModele")
+	public long getCountModele() {
+		return this.mr.count();
+	}
+	
+	@GetMapping(path="/getCountModeleSansCollection")
+	public long getCountModeleSansCollection() {
+		return this.mr.countModeleSansCollection();
 	}
 }

@@ -82,7 +82,7 @@ public class UserController {
 	
 	
 	
-	@GetMapping("/getAllUser")
+	@GetMapping("/getAlleUser")
 	public List<UserDTO> getAllUser(){
 		List<User> users= userRepository.findAll();
 		List<UserDTO> list = new ArrayList<UserDTO>(users.size());
