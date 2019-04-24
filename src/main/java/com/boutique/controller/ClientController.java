@@ -15,17 +15,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boutique.dao.AdresseRepository;
 import com.boutique.dao.ClientRepository;
 import com.boutique.dao.CompteRepository;
 import com.boutique.dao.MesureRepository;
+import com.boutique.dto.AdresseDTO;
 import com.boutique.dto.ClientDTODetails;
 import com.boutique.dto.CompteDTO;
 import com.boutique.dto.MesureDTO;
 import com.boutique.dto.MesureDTODetails;
 import com.boutique.exception.NotExistException;
+import com.boutique.mapper.AdresseMapper;
 import com.boutique.mapper.ClientMapper;
 import com.boutique.mapper.CompteMapper;
 import com.boutique.mapper.MesureMapper;
+import com.boutique.model.Adresse;
 import com.boutique.model.Client;
 import com.boutique.model.Compte;
 import com.boutique.model.Mesure;
@@ -45,11 +49,16 @@ public class ClientController {
 	private CompteRepository compteRepository;
 	
 	@Autowired
+	private AdresseRepository adresseRepository;
+	
+	@Autowired
 	private ClientMapper clientMapper;
 	@Autowired
 	private CompteMapper compteMapper;
 	@Autowired
 	private MesureMapper mesureMapper;
+	@Autowired 
+	private AdresseMapper adresseMapper;
 	
 	@PostMapping(path="/saveClient")
 	public ClientDTODetails saveClient(@RequestBody ClientDTODetails clientDD) {
@@ -85,6 +94,28 @@ public class ClientController {
 		
 		return mesureMapper.mesureToMesureDTODetails(mesure);
 		
+	}
+	
+	@PostMapping("/saveAdresse/{idClient}")
+	public AdresseDTO saveAdresse(@PathVariable long idClient,@RequestBody AdresseDTO adresseDTO) {
+		Optional<Client> oClient= clientRepository.findById(idClient);
+		if(!oClient.isPresent()) {
+			throw new NotExistException("Ce client n'existe pas");
+		}
+		Adresse adresse=adresseMapper.adresseDTOToAdresse(adresseDTO);
+		adresse.setPersonne(oClient.get());
+		return adresseMapper.adresseToAdresseDTO(adresseRepository.save(adresse));
+	}
+	
+	@GetMapping("/deleteAdresse/{idAdresse}")
+	public boolean deleteAddresse(@PathVariable("idAdresse") long idAdresse) {
+		Optional<Adresse> oAdresse=adresseRepository.findById(idAdresse);
+		if(!oAdresse.isPresent()) {
+			throw new NotExistException("l'adresse n'existe pas");
+		}
+		
+		adresseRepository.deleteById(idAdresse);
+		return true;
 	}
 	
 	@DeleteMapping(path="/deleteClient/{idClient}")

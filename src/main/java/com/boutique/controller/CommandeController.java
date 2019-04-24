@@ -133,9 +133,8 @@ public class CommandeController {
 			System.out.println("ligne mesure   "+ligneMesure.getValeur());
 			System.out.println("ligne msure   "+ligneMesure.getProprieteMesure());
 		}
-		Produit p=saveProduit(ligneCommandeDTO.getProduit());
-		ligneCommande.setProduit(p);
-		return modelMapper.map(ligneCr.save(ligneCommande),LigneCommandeDTODetais.class);
+		
+		return modelMapper.map(saveLigneCommande(ligneCommandeDTO),LigneCommandeDTODetais.class);
 	}
 
 	public LigneCommande saveLigneCommande(@RequestBody LigneCommandeDTODetais ligneCommandeDTO) {
@@ -144,6 +143,7 @@ public class CommandeController {
 		ligneCommande.setProduit(p);
 		return ligneCr.save(ligneCommande);
 	}
+
 	
 	@GetMapping(path= "/deleteLigneCommandeById/{id}")
 	public boolean deleteLigneCommandeById(@PathVariable long id) {
