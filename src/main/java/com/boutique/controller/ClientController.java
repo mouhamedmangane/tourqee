@@ -97,7 +97,7 @@ public class ClientController {
 	}
 	
 	@PostMapping("/saveAdresse/{idClient}")
-	public AdresseDTO saveAdresse(@PathVariable long idClient,@RequestBody AdresseDTO adresseDTO) {
+	public AdresseDTO saveAdresse(@PathVariable("idClient") long idClient,@RequestBody AdresseDTO adresseDTO) {
 		Optional<Client> oClient= clientRepository.findById(idClient);
 		if(!oClient.isPresent()) {
 			throw new NotExistException("Ce client n'existe pas");
